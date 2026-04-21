@@ -115,15 +115,17 @@
       </div>
     </div>
 
-    <div class="rounded-3xl p-6 bg-white border border-slate-200 shadow-sm relative overflow-hidden">
-      <div class="absolute -top-6 -right-6 text-8xl opacity-10 select-none">🎂</div>
+    <a href="./apps/growth/milestones.html" class="rounded-3xl p-6 bg-white border border-slate-200 shadow-sm relative overflow-hidden block hover:-translate-y-1 hover:shadow-xl hover:ring-4 hover:ring-amber-200 transition">
+      <div class="absolute -top-6 -right-6 text-8xl opacity-10 select-none">🌷</div>
       <div class="relative">
-        <div class="text-xs uppercase tracking-wider text-slate-400 mb-2">Memory · 2024.03</div>
-        <div class="text-2xl font-black mb-1 text-slate-800">暄暄的 1 岁生日</div>
-        <div class="text-sm text-slate-500 mb-5">人生第一个蛋糕 & 第一支蜡烛 🕯️</div>
-        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 text-slate-400 text-xs">相册整理中</span>
+        <div class="text-xs uppercase tracking-wider text-amber-500 mb-2 font-semibold">Since · 2024.04.19</div>
+        <div class="text-2xl font-black mb-1 text-slate-800">瑷暄记录 · 人生第一次</div>
+        <div class="text-sm text-slate-500 mb-5">名字由来 + 从出生到现在的每一次「第一次」📖</div>
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-50 text-amber-600 text-xs font-semibold">
+          翻开看看 <i class="ri-arrow-right-line"></i>
+        </span>
       </div>
-    </div>
+    </a>
 
     <div class="rounded-3xl p-6 bg-gradient-to-br from-amber-400 to-rose-400 text-white shadow-lg relative overflow-hidden">
       <div class="absolute -top-6 -right-6 text-8xl opacity-20 select-none">💌</div>
@@ -200,7 +202,13 @@
     plan: { label: '规划中', dot: 'bg-slate-300',   text: 'text-slate-500' }
   };
 
-  const categories = Object.values(window.FAMILY_DATA);
+  // 首页展示顺序：成长日记 → 旅行路书 → 家庭相册 → 亲子小程序 → 家庭游戏厅
+  const CATEGORY_ORDER = ['growth', 'travel', 'album', 'mini-programs', 'games'];
+  const categories = CATEGORY_ORDER
+    .map(id => window.FAMILY_DATA[id])
+    .filter(Boolean)
+    // 兜底：把 ORDER 里没列出的分类追加到末尾
+    .concat(Object.values(window.FAMILY_DATA).filter(c => !CATEGORY_ORDER.includes(c.id)));
 
   // ---- 顶部统计 ----
   const allItems = categories.flatMap(c => c.items);
@@ -264,19 +272,27 @@
     const devItems = items.filter(i => i.status === 'dev');
     const planItems = items.filter(i => i.status === 'plan');
 
-    // 预览前 3 条
+    // 预览前 3 条（已上线的可点击跳转，其它保持不可点击）
     const preview = items.slice(0, 3).map(it => {
       const s = STATUS[it.status] || STATUS.plan;
+      const clickable = it.status === 'live' && it.href && it.href !== '#';
+      const Tag = clickable ? 'a' : 'div';
+      const attrs = clickable
+        ? `href="${it.href}" class="item-link flex items-center gap-2 py-2 px-3 rounded-xl hover:bg-slate-50 transition cursor-pointer"`
+        : `class="flex items-center gap-2 py-2 px-3 rounded-xl opacity-80"`;
       return `
-        <li class="flex items-center gap-2 py-2 px-3 rounded-xl hover:bg-slate-50 transition">
-          <span class="text-xl">${it.cover || cat.emoji}</span>
-          <div class="min-w-0 flex-1">
-            <div class="text-sm font-semibold text-slate-800 truncate">${it.title}</div>
-            <div class="text-xs text-slate-400 truncate">${it.subtitle || ''}</div>
-          </div>
-          <span class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded ${s.text} bg-slate-50 whitespace-nowrap">
-            <span class="w-1.5 h-1.5 rounded-full ${s.dot}"></span>${s.label}
-          </span>
+        <li>
+          <${Tag} ${attrs}>
+            <span class="text-xl">${it.cover || cat.emoji}</span>
+            <div class="min-w-0 flex-1">
+              <div class="text-sm font-semibold text-slate-800 truncate">${it.title}</div>
+              <div class="text-xs text-slate-400 truncate">${it.subtitle || ''}</div>
+            </div>
+            <span class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded ${s.text} bg-slate-50 whitespace-nowrap">
+              <span class="w-1.5 h-1.5 rounded-full ${s.dot}"></span>${s.label}
+            </span>
+            ${clickable ? '<i class="ri-arrow-right-s-line text-slate-300 group-hover:text-sky-500 transition"></i>' : ''}
+          </${Tag}>
         </li>
       `;
     }).join('');
@@ -284,8 +300,8 @@
     const card = document.createElement('div');
     card.className = `group relative rounded-3xl bg-white border border-slate-100 shadow-sm overflow-hidden transition hover:-translate-y-1 hover:shadow-xl hover:ring-4 ${a.ring} flex flex-col`;
     card.innerHTML = `
-      <!-- 顶部渐变头 -->
-      <div class="relative px-6 pt-6 pb-5 bg-gradient-to-br ${a.grad} text-white overflow-hidden">
+      <!-- 顶部渐变头（点击跳转到分类页） -->
+      <a href="./category.html?id=${cat.id}" class="block relative px-6 pt-6 pb-5 bg-gradient-to-br ${a.grad} text-white overflow-hidden hover:brightness-110 transition">
         <div class="absolute -top-4 -right-4 text-[7rem] leading-none opacity-20 select-none group-hover:scale-110 transition">${cat.emoji}</div>
         <div class="relative">
           <div class="flex items-center justify-between mb-3">
@@ -297,19 +313,19 @@
           <div class="text-xs font-semibold opacity-90">${cat.subtitle}</div>
           <div class="text-2xl font-black mt-0.5">${cat.title}</div>
         </div>
-      </div>
+      </a>
 
-      <!-- 中部介绍 -->
-      <div class="px-6 pt-4 pb-2">
+      <!-- 中部介绍（点击跳转到分类页） -->
+      <a href="./category.html?id=${cat.id}" class="block px-6 pt-4 pb-2 hover:bg-slate-50/60 transition">
         <p class="text-sm text-slate-500 leading-relaxed min-h-[2.75rem]">${cat.desc}</p>
         <div class="flex items-center gap-3 mt-3 text-xs text-slate-400">
           ${liveItems.length ? `<span class="inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>${liveItems.length} 已上线</span>` : ''}
           ${devItems.length  ? `<span class="inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>${devItems.length} 开发中</span>`  : ''}
           ${planItems.length ? `<span class="inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>${planItems.length} 规划中</span>` : ''}
         </div>
-      </div>
+      </a>
 
-      <!-- 子项预览 -->
+      <!-- 子项预览（已上线的子项可直接点击跳转到详情页） -->
       <ul class="px-3 pb-3 pt-1 space-y-0.5 flex-1">${preview || `<li class="text-xs text-slate-400 px-3 py-3">还没有内容，敬请期待</li>`}</ul>
 
       <!-- 底部进入按钮 -->

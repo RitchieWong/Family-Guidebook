@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>瑷暄记录 · 暄暄的成长里程碑</title>
+  <meta name="description" content="王瑷暄的成长记录：从 2024 年出生到现在的每一个小小第一次，名字由来与人生第一次。">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+  <link rel="stylesheet" href="../../assets/style.css">
+  <style>
+    /* 时间线竖线 */
+    .timeline-wrap { position: relative; }
+    .timeline-wrap::before {
+      content: '';
+      position: absolute;
+      left: 1.125rem;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #fbbf24, #f472b6, #0ea5e9 80%, transparent);
+      border-radius: 2px;
+    }
+    @media (min-width: 768px) {
+      .timeline-wrap::before { left: 50%; transform: translateX(-1px); }
+    }
+    .dot {
+      position: absolute;
+      left: 1.125rem;
+      width: 14px; height: 14px;
+      border-radius: 9999px;
+      transform: translate(-50%, 6px);
+      background: #fff;
+      border: 3px solid #f59e0b;
+      box-shadow: 0 0 0 4px #fff7ed;
+      z-index: 2;
+    }
+    @media (min-width: 768px) {
+      .dot { left: 50%; }
+    }
+    .row-left, .row-right { position: relative; }
+    @media (min-width: 768px) {
+      .row-left  { padding-right: 50%; padding-left: 0; }
+      .row-right { padding-left: 50%; padding-right: 0; }
+      .row-left  > .bubble { margin-right: 2.5rem; }
+      .row-right > .bubble { margin-left: 2.5rem; }
+    }
+    .bubble {
+      position: relative;
+      background: #fff;
+      border: 1px solid #f1f5f9;
+      border-radius: 1.25rem;
+      padding: 1rem 1.125rem;
+      box-shadow: 0 4px 14px -8px rgba(15,23,42,.08);
+      transition: all .2s ease;
+    }
+    .bubble:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -12px rgba(15,23,42,.15);
+    }
+    .year-chip {
+      position: sticky;
+      top: 80px;
+      z-index: 20;
+    }
+    /* 名字渐变字 */
+    .name-char {
+      background: linear-gradient(135deg, #f59e0b, #ec4899, #8b5cf6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+<!-- 顶部导航 -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/60">
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
+    <a href="../../index.html" class="flex items-center gap-2 group">
+      <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 via-rose-400 to-fuchsia-500 flex items-center justify-center text-white shadow-sm">
+        <i class="ri-sparkling-2-fill"></i>
+      </span>
+      <span class="font-bold text-base md:text-lg bg-gradient-to-r from-amber-500 to-rose-500 bg-clip-text text-transparent">瑷暄记录</span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+      <a href="../../index.html" class="hover:text-amber-600 transition flex items-center gap-1"><i class="ri-home-4-line"></i>首页</a>
+      <a href="../../category.html?id=growth" class="hover:text-amber-600 transition flex items-center gap-1"><i class="ri-folder-line"></i>成长日记</a>
+      <a href="#name" class="hover:text-amber-600 transition">名字由来</a>
+      <a href="#timeline" class="hover:text-amber-600 transition">成长时间线</a>
+    </div>
+    <button id="nav-toggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition text-slate-700" aria-label="菜单">
+      <i class="ri-menu-line text-2xl" id="nav-icon"></i>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-slate-200/60">
+    <div class="px-4 py-2 grid grid-cols-2 gap-1 text-xs font-medium text-slate-700">
+      <a href="../../index.html" class="py-3 text-center rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center gap-1"><i class="ri-home-4-line"></i>首页</a>
+      <a href="../../category.html?id=growth" class="py-3 text-center rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center gap-1"><i class="ri-folder-line"></i>成长日记</a>
+      <a href="#name" class="py-3 text-center rounded-lg hover:bg-amber-50 hover:text-amber-600">名字由来</a>
+      <a href="#timeline" class="py-3 text-center rounded-lg hover:bg-amber-50 hover:text-amber-600">时间线</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="relative pt-24 pb-16 px-6 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-amber-50 via-rose-50 to-fuchsia-50"></div>
+  <div class="absolute -top-10 -left-10 w-72 h-72 rounded-full bg-amber-300/30 blur-3xl"></div>
+  <div class="absolute bottom-10 -right-10 w-80 h-80 rounded-full bg-rose-300/30 blur-3xl"></div>
+  <div class="absolute top-20 right-10 text-8xl opacity-10 select-none hidden md:block">🌸</div>
+  <div class="absolute bottom-10 left-10 text-7xl opacity-10 select-none hidden md:block">👶</div>
+
+  <div class="relative max-w-5xl mx-auto">
+    <nav class="flex items-center gap-2 text-sm text-slate-500 mb-6">
+      <a href="../../index.html" class="hover:text-amber-600 transition inline-flex items-center gap-1"><i class="ri-home-4-line"></i>首页</a>
+      <i class="ri-arrow-right-s-line"></i>
+      <a href="../../category.html?id=growth" class="hover:text-amber-600 transition">成长日记</a>
+      <i class="ri-arrow-right-s-line"></i>
+      <span class="text-slate-700 font-medium">瑷暄记录</span>
+    </nav>
+
+    <div class="flex flex-wrap items-center gap-2 mb-6">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 border border-amber-200 text-amber-700 text-sm font-medium">
+        <i class="ri-heart-3-fill"></i>
+        <span>王瑷暄 · 属龙女孩 · 2024 春</span>
+      </div>
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 border border-emerald-200 text-emerald-700 text-sm font-medium">
+        <i class="ri-plant-line"></i>
+        <span>谷雨时节 · 春生万物</span>
+      </div>
+    </div>
+
+    <h1 class="text-4xl md:text-6xl font-black leading-tight mb-5">
+      瑷暄记录<br>
+      <span class="bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-500 bg-clip-text text-transparent">美好 · 温暖 · 一天天长大</span>
+    </h1>
+    <p class="text-lg text-slate-600 max-w-2xl mb-8">
+      从 2024 年 4 月 19 日清晨 6 点 15 分开始，这个世界多了一个小天使。
+      这里是爸爸悄悄写的成长簿 —— 每一次"第一次"，每一个小小的里程碑。
+    </p>
+
+    <!-- 出生信息 -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 max-w-5xl">
+      <div class="bg-white/80 backdrop-blur rounded-2xl p-4 border border-white shadow-sm">
+        <div class="text-amber-500 text-xl mb-1"><i class="ri-calendar-event-line"></i></div>
+        <div class="text-xs text-slate-500">出生日期</div>
+        <div class="font-bold text-slate-800">2024.04.19</div>
+      </div>
+      <div class="bg-white/80 backdrop-blur rounded-2xl p-4 border border-white shadow-sm">
+        <div class="text-rose-500 text-xl mb-1"><i class="ri-time-line"></i></div>
+        <div class="text-xs text-slate-500">出生时辰</div>
+        <div class="font-bold text-slate-800">06:15</div>
+      </div>
+      <div class="bg-white/80 backdrop-blur rounded-2xl p-4 border border-white shadow-sm">
+        <div class="text-emerald-500 text-xl mb-1"><i class="ri-plant-line"></i></div>
+        <div class="text-xs text-slate-500">出生时节</div>
+        <div class="font-bold text-slate-800">谷雨 <span class="text-xs font-medium text-slate-400">· 春六</span></div>
+      </div>
+      <div class="bg-white/80 backdrop-blur rounded-2xl p-4 border border-white shadow-sm">
+        <div class="text-fuchsia-500 text-xl mb-1"><i class="ri-scales-3-line"></i></div>
+        <div class="text-xs text-slate-500">出生体重</div>
+        <div class="font-bold text-slate-800">7.4 斤</div>
+      </div>
+      <div class="bg-white/80 backdrop-blur rounded-2xl p-4 border border-white shadow-sm">
+        <div class="text-sky-500 text-xl mb-1"><i class="ri-ruler-line"></i></div>
+        <div class="text-xs text-slate-500">出生身长</div>
+        <div class="font-bold text-slate-800">52 cm</div>
+      </div>
+    </div>
+
+    <!-- 谷雨小诗签 -->
+    <div class="mt-5 max-w-3xl rounded-2xl bg-white/70 backdrop-blur border border-emerald-100 px-5 py-4 flex items-start gap-3">
+      <span class="text-2xl shrink-0">🌾</span>
+      <div class="text-sm text-slate-600 leading-relaxed">
+        <span class="font-semibold text-emerald-700">谷雨</span> 是春天的最后一个节气 ——「雨生百谷」，万物生长、牡丹花开。
+        2024 年的谷雨是 <span class="font-semibold text-slate-800">4 月 19 日</span>，你正好在这一天来到了我们身边，像春末的一场甘雨，被爸妈小心翼翼地接住。
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 名字由来 -->
+<section id="name" class="max-w-5xl mx-auto px-6 py-16">
+  <div class="mb-10 text-center">
+    <div class="text-sm font-semibold text-rose-500 mb-2 tracking-wider">THE STORY OF YOUR NAME</div>
+    <h2 class="text-3xl md:text-4xl font-black">关于你的名字</h2>
+    <p class="text-slate-500 mt-2">爸爸妈妈给你的第一份礼物</p>
+  </div>
+
+  <!-- 名字大字展示 -->
+  <div class="rounded-3xl bg-gradient-to-br from-amber-50 via-rose-50 to-fuchsia-50 border border-white shadow-sm p-8 md:p-12 mb-10 text-center relative overflow-hidden">
+    <div class="absolute top-6 left-6 text-5xl opacity-20 select-none">🌷</div>
+    <div class="absolute bottom-6 right-6 text-5xl opacity-20 select-none">✨</div>
+    <div class="relative flex items-center justify-center gap-6 md:gap-10">
+      <div>
+        <div class="text-7xl md:text-9xl font-black name-char leading-none">王</div>
+        <div class="mt-3 text-xs md:text-sm text-slate-500">姓</div>
+      </div>
+      <div>
+        <div class="text-7xl md:text-9xl font-black name-char leading-none">瑷</div>
+        <div class="mt-3 text-xs md:text-sm text-slate-500">ài</div>
+      </div>
+      <div>
+        <div class="text-7xl md:text-9xl font-black name-char leading-none">暄</div>
+        <div class="mt-3 text-xs md:text-sm text-slate-500">xuān</div>
+      </div>
+    </div>
+    <div class="relative mt-8 text-lg md:text-2xl text-slate-700 font-medium">
+      字音：<span class="font-bold text-amber-600">王 · 爱 · 心园</span>
+    </div>
+    <div class="mt-2 text-sm md:text-base text-slate-500">—— 美好温暖的女孩子 ——</div>
+  </div>
+
+  <!-- 字意 / 字形 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div class="rounded-3xl bg-white border border-slate-100 p-6 shadow-sm">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center"><i class="ri-quill-pen-line"></i></span>
+        <div class="font-bold text-slate-800">字意</div>
+      </div>
+      <div class="space-y-3 text-slate-600">
+        <div class="flex items-start gap-3">
+          <span class="text-3xl font-black name-char leading-none">瑷</span>
+          <div class="pt-1">
+            <div class="text-sm font-semibold text-slate-800">美好</div>
+            <div class="text-xs text-slate-500 mt-0.5">愿你一生被爱、美好相伴</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-3xl font-black name-char leading-none">暄</span>
+          <div class="pt-1">
+            <div class="text-sm font-semibold text-slate-800">温暖</div>
+            <div class="text-xs text-slate-500 mt-0.5">愿你心里有光，走到哪儿都温暖</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-3xl bg-white border border-slate-100 p-6 shadow-sm">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center"><i class="ri-heart-pulse-line"></i></span>
+        <div class="font-bold text-slate-800">字形 · 两人结合</div>
+      </div>
+      <div class="space-y-3 text-slate-600">
+        <div class="flex items-start gap-3">
+          <span class="text-3xl font-black name-char leading-none">瑷</span>
+          <div class="pt-1">
+            <div class="text-sm font-semibold text-slate-800">王字旁</div>
+            <div class="text-xs text-slate-500 mt-0.5">同 <span class="text-amber-600 font-semibold">嘉琦</span> 的"琦" · 来自爸爸</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-3xl font-black name-char leading-none">暄</span>
+          <div class="pt-1">
+            <div class="text-sm font-semibold text-slate-800">日字旁</div>
+            <div class="text-xs text-slate-500 mt-0.5">同 <span class="text-rose-600 font-semibold">芳晴</span> 的"晴" · 来自妈妈</div>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500 text-center">
+          王字旁 + 日字旁 · 爸爸和妈妈的一部分 · 拼出了你 💕
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 数据小盘 -->
+<section class="max-w-5xl mx-auto px-6">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+      <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl mb-3"><i class="ri-sparkling-2-line"></i></div>
+      <div class="text-3xl font-black text-slate-800" id="stat-total">0<span class="text-base font-semibold text-slate-500 ml-1">个</span></div>
+      <div class="text-xs text-slate-500 mt-1">被记录的第一次</div>
+    </div>
+    <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+      <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl mb-3"><i class="ri-calendar-line"></i></div>
+      <div class="text-3xl font-black text-slate-800" id="stat-days">0<span class="text-base font-semibold text-slate-500 ml-1">天</span></div>
+      <div class="text-xs text-slate-500 mt-1">从出生到今天</div>
+    </div>
+    <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+      <div class="w-10 h-10 rounded-xl bg-fuchsia-100 text-fuchsia-600 flex items-center justify-center text-xl mb-3"><i class="ri-cake-3-line"></i></div>
+      <div class="text-3xl font-black text-slate-800" id="stat-age">0<span class="text-base font-semibold text-slate-500 ml-1">岁</span></div>
+      <div class="text-xs text-slate-500 mt-1">小人儿现在的年龄</div>
+    </div>
+    <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+      <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl mb-3"><i class="ri-leaf-line"></i></div>
+      <div class="text-3xl font-black text-slate-800" id="stat-years">0<span class="text-base font-semibold text-slate-500 ml-1">年</span></div>
+      <div class="text-xs text-slate-500 mt-1">跨越的年份</div>
+    </div>
+  </div>
+</section>
+
+<!-- 时间线 -->
+<section id="timeline" class="max-w-5xl mx-auto px-6 py-16">
+  <div class="mb-10 text-center">
+    <div class="text-sm font-semibold text-amber-500 mb-2 tracking-wider">FIRST TIMES · GROWING UP</div>
+    <h2 class="text-3xl md:text-4xl font-black">成长时间线</h2>
+    <p class="text-slate-500 mt-2">每一行都是一次"哇塞，你怎么这么厉害"的瞬间</p>
+  </div>
+
+  <!-- 筛选 -->
+  <div class="flex flex-wrap items-center gap-2 mb-8 justify-center">
+    <button data-year="all" class="year-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-800 text-white shadow">全部</button>
+    <button data-year="2024" class="year-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-600 transition">2024</button>
+    <button data-year="2025" class="year-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-600 transition">2025</button>
+    <button data-year="2026" class="year-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-600 transition">2026</button>
+  </div>
+
+  <div id="timeline-list" class="timeline-wrap space-y-6 md:space-y-10 pl-0"></div>
+</section>
+
+<!-- 底部寄语 -->
+<section class="max-w-5xl mx-auto px-6 pb-16">
+  <div class="rounded-3xl p-8 md:p-12 bg-gradient-to-br from-amber-400 via-rose-400 to-fuchsia-500 text-white text-center relative overflow-hidden shadow-lg">
+    <div class="absolute -top-6 -left-6 text-8xl opacity-20 select-none">🌷</div>
+    <div class="absolute -bottom-6 -right-6 text-8xl opacity-20 select-none">💌</div>
+    <div class="relative">
+      <div class="text-xs uppercase tracking-widest opacity-80 mb-3">A Letter From Daddy</div>
+      <div class="text-xl md:text-2xl font-bold leading-relaxed max-w-2xl mx-auto">
+        "暄暄呀，<br>
+        这里记下来的每一个小小第一次，<br>
+        都是爸爸妈妈悄悄收起来的宝藏。<br>
+        你慢慢长，我们慢慢记。"
+      </div>
+      <div class="mt-6 text-sm opacity-80">—— 爸爸</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="mt-4 border-t border-slate-200 bg-white/60 backdrop-blur">
+  <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-slate-500">
+    <div class="flex items-center gap-2">
+      <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 via-rose-400 to-fuchsia-500 flex items-center justify-center text-white">
+        <i class="ri-heart-fill"></i>
+      </span>
+      <span>© <span id="year"></span> 瑷暄记录 · Made with <i class="ri-heart-fill text-rose-400"></i> for 暄暄</span>
+    </div>
+    <a href="../../index.html" class="inline-flex items-center gap-1 hover:text-amber-600 transition">
+      <i class="ri-arrow-left-line"></i>返回首页
+    </a>
+  </div>
+</footer>
+
+<script>
+  // ================= 数据：里程碑时间线 =================
+  // 每一项：{ date: 'YYYY-MM-DD', age: '年龄描述', title: '事件', emoji, tag: '分类', highlight?: true }
+  const BIRTHDAY = new Date('2024-04-19');
+
+  const MILESTONES = [
+    // ---------- 2024 ----------
+    { date: '2024-04-19', age: '出生 · 0 天',     title: '你好呀，这个世界 · 谷雨落地',           emoji: '👶', tag: '诞生', highlight: true,
+      desc: '早上 6:15，7.4 斤 52 cm。这一天正是谷雨——春天的最后一个节气，雨生百谷，你也像春末的一场甘雨，被我们接到了怀里。' },
+    { date: '2024-07-01', age: '2 个月 15 天',    title: '会无意识清晰地叫爸爸、妈妈',           emoji: '🗣️', tag: '语言' },
+    { date: '2024-07-28', age: '3 个月 9 天',     title: '百天啦！能辅助独坐、能短暂支撑趴',     emoji: '🎉', tag: '动作', highlight: true },
+    { date: '2024-08-10', age: '3 个月 22 天',    title: '主动模仿发出弹舌「ze」的声音',         emoji: '👅', tag: '语言' },
+    { date: '2024-08-15', age: '3 个月 27 天',    title: '主动模仿发出亲嘴「mo」的声音',         emoji: '😘', tag: '语言' },
+    { date: '2024-08-20', age: '4 个月 1 天',     title: '第一次自己翻身',                       emoji: '🔄', tag: '动作', highlight: true,
+      desc: '本来躺着，回个头就看见你趴在那儿了，笑死。' },
+    { date: '2024-08-21', age: '4 个月 2 天',     title: '断奶（为了宝妈的身体）',               emoji: '🍼', tag: '生活' },
+    { date: '2024-09-05', age: '4 个月 17 天',    title: '第一次坐高铁回老家',                   emoji: '🚄', tag: '旅行', highlight: true },
+    { date: '2024-09-20', age: '5 个月',          title: '趴着会转圈、会往后爬啦',               emoji: '🔁', tag: '动作' },
+    { date: '2024-09-29', age: '5 个月 9 天',     title: '拉着妈妈的手能坐起来了',               emoji: '🤲', tag: '动作' },
+    { date: '2024-10-24', age: '6 个月 5 天',     title: '会往后爬了 · 第一次吃辅食',             emoji: '🍚', tag: '动作', highlight: true },
+    { date: '2024-11-02', age: '6 个月 14 天',    title: '翻身打滚灵活自如 · 第一次吃脚',         emoji: '🦶', tag: '动作' },
+    { date: '2024-11-19', age: '7 个月',          title: '表达欲爆棚，开始爱大叫',               emoji: '📣', tag: '语言' },
+    { date: '2024-11-22', age: '7 个月 3 天',     title: '两颗上牙冒头啦',                       emoji: '🦷', tag: '身体', highlight: true },
+    { date: '2024-11-23', age: '7 个月 4 天',     title: '能持续一分钟左右双手交替玩玩具',       emoji: '🧸', tag: '动作' },
+    { date: '2024-11-30', age: '7 个月 11 天',    title: '成功学会往前爬！',                     emoji: '🐛', tag: '动作', highlight: true },
+    { date: '2024-12-01', age: '7 个月 12 天',    title: '清晰大声叫「妈」',                     emoji: '👩', tag: '语言' },
+    { date: '2024-12-09', age: '7 个月 20 天',    title: '重复说「妈妈」「爸爸」',               emoji: '💬', tag: '语言' },
+    { date: '2024-12-19', age: '8 个月',          title: '自主从趴着坐起来',                     emoji: '🧍', tag: '动作' },
+
+    // ---------- 2025 ----------
+    { date: '2025-01-10', age: '8 个月 22 天',    title: '扶着东西能站立啦',                     emoji: '🧗', tag: '动作', highlight: true },
+    { date: '2025-02-23', age: '10 个月 4 天',    title: '会用鸭嘴奶瓶喝水',                     emoji: '🦆', tag: '生活' },
+    { date: '2025-03-09', age: '10 个月 18 天',   title: '会用第三阶段直嘴奶瓶喝水',             emoji: '🥤', tag: '生活' },
+    { date: '2025-03-22', age: '11 个月 3 天',    title: '完全松手站立几秒钟',                   emoji: '🌟', tag: '动作', highlight: true },
+    { date: '2025-04-09', age: '11 个月 21 天',   title: '会自己玩摇摇车前后摇摆',               emoji: '🎠', tag: '生活' },
+    { date: '2025-04-26', age: '1 岁 7 天',       title: '学会点头 · 问问题会点头摇头反馈',       emoji: '👌', tag: '社交', highlight: true },
+    { date: '2025-05-06', age: '1 岁 17 天',      title: '学会走路，能自己走好几步',             emoji: '🚶‍♀️', tag: '动作', highlight: true,
+      desc: '从这一天开始，追你变成了爸爸妈妈的日常运动。' },
+    { date: '2025-05-10', age: '1 岁 21 天',      title: '吃……屎😭',                            emoji: '💩', tag: '趣事' },
+    { date: '2025-08-03', age: '1 岁 3 个月 15 天', title: '会来回跑啦',                         emoji: '🏃‍♀️', tag: '动作' },
+    { date: '2025-08-04', age: '1 岁 3 个月 16 天', title: '把自己反锁在了卫生间',               emoji: '🚪', tag: '趣事', highlight: true,
+      desc: '第一次让全家人心跳加速的小冒险家时刻。' },
+    { date: '2025-08-24', age: '1 岁 4 个月 5 天',  title: '会数 1—10 啦',                        emoji: '🔢', tag: '认知', highlight: true },
+    { date: '2025-12-12', age: '1 岁 6 个月 23 天', title: '第一次看雪',                          emoji: '❄️', tag: '人生第一次', highlight: true },
+
+    // ---------- 2026 ----------
+    { date: '2026-01-28', age: '1 岁 9 个月 9 天',  title: '幼儿园体验课后第一次发烧',            emoji: '🤒', tag: '身体' },
+    { date: '2026-03-10', age: '1 岁 10 个月 19 天', title: '会吹蜡烛了',                         emoji: '🕯️', tag: '人生第一次', highlight: true },
+    { date: '2026-03-12', age: '1 岁 10 个月 21 天', title: '第一次用小马桶',                     emoji: '🚽', tag: '生活', highlight: true },
+    { date: '2026-04-12', age: '1 岁 11 个月 24 天', title: '第一次露营',                         emoji: '⛺', tag: '人生第一次', highlight: true },
+    { date: '2026-04-13', age: '1 岁 11 个月 25 天', title: '第一次上托班',                       emoji: '🎒', tag: '人生第一次', highlight: true }
+  ];
+
+  // ================= 渲染：时间线 =================
+  const TAG_COLORS = {
+    '诞生':       'bg-rose-100 text-rose-700',
+    '语言':       'bg-sky-100 text-sky-700',
+    '动作':       'bg-emerald-100 text-emerald-700',
+    '身体':       'bg-fuchsia-100 text-fuchsia-700',
+    '生活':       'bg-amber-100 text-amber-700',
+    '社交':       'bg-violet-100 text-violet-700',
+    '认知':       'bg-cyan-100 text-cyan-700',
+    '旅行':       'bg-orange-100 text-orange-700',
+    '趣事':       'bg-pink-100 text-pink-700',
+    '人生第一次': 'bg-gradient-to-r from-amber-100 to-rose-100 text-rose-700'
+  };
+
+  const listEl = document.getElementById('timeline-list');
+
+  function formatDate(s) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
+    if (!m) return s;
+    return `${m[1]}.${m[2]}.${m[3]}`;
+  }
+
+  function render(year = 'all') {
+    // 按日期升序（从出生开始看，更有成长感）
+    const sorted = [...MILESTONES].sort((a, b) => a.date.localeCompare(b.date));
+    const filtered = year === 'all' ? sorted : sorted.filter(m => m.date.startsWith(year));
+
+    let lastYear = null;
+    const html = filtered.map((m, idx) => {
+      const y = m.date.slice(0, 4);
+      const tagColor = TAG_COLORS[m.tag] || 'bg-slate-100 text-slate-600';
+      const side = idx % 2 === 0 ? 'row-left' : 'row-right';
+      const yearHeader = y !== lastYear ? `
+        <div class="year-chip flex justify-center mb-6">
+          <span class="px-4 py-1.5 rounded-full bg-slate-900 text-white text-sm font-bold shadow-lg">${y} 年</span>
+        </div>` : '';
+      lastYear = y;
+
+      const highlight = m.highlight
+        ? 'ring-2 ring-amber-200 bg-gradient-to-br from-white to-amber-50'
+        : '';
+
+      return `
+        ${yearHeader}
+        <div class="${side} pl-10 md:pl-0">
+          <span class="dot ${m.highlight ? 'border-rose-500' : ''}"></span>
+          <div class="bubble ${highlight}">
+            <div class="flex items-start gap-3">
+              <div class="text-3xl md:text-4xl leading-none shrink-0">${m.emoji}</div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2 flex-wrap mb-1">
+                  <span class="text-[11px] font-bold text-slate-400">${formatDate(m.date)}</span>
+                  <span class="text-[11px] font-semibold text-slate-500">· ${m.age}</span>
+                  <span class="inline-flex items-center text-[10px] px-2 py-0.5 rounded-full font-semibold ${tagColor}">${m.tag}</span>
+                  ${m.highlight ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-rose-500 text-white font-semibold">★</span>' : ''}
+                </div>
+                <div class="text-base font-bold text-slate-800 leading-snug">${m.title}</div>
+                ${m.desc ? `<div class="text-sm text-slate-500 mt-1 leading-relaxed">${m.desc}</div>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    listEl.innerHTML = html || `<div class="text-center py-12 text-slate-400">这一年还没有记录，再等等～</div>`;
+  }
+
+  render('all');
+
+  // 年份筛选
+  document.querySelectorAll('.year-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.year-btn').forEach(b => {
+        b.classList.remove('bg-slate-800', 'text-white', 'shadow');
+        b.classList.add('bg-white', 'border', 'border-slate-200', 'text-slate-600');
+      });
+      btn.classList.remove('bg-white', 'border', 'border-slate-200', 'text-slate-600');
+      btn.classList.add('bg-slate-800', 'text-white', 'shadow');
+      render(btn.dataset.year);
+    });
+  });
+
+  // ================= 顶部数据盘 =================
+  (function renderStats() {
+    const now = new Date();
+    const days = Math.floor((now - BIRTHDAY) / (1000 * 60 * 60 * 24));
+    // 年龄（岁）用实岁
+    let age = now.getFullYear() - BIRTHDAY.getFullYear();
+    const m = now.getMonth() - BIRTHDAY.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < BIRTHDAY.getDate())) age--;
+    const years = new Set(MILESTONES.map(x => x.date.slice(0, 4))).size;
+
+    document.getElementById('stat-total').innerHTML = `${MILESTONES.length}<span class="text-base font-semibold text-slate-500 ml-1">个</span>`;
+    document.getElementById('stat-days').innerHTML  = `${days}<span class="text-base font-semibold text-slate-500 ml-1">天</span>`;
+    document.getElementById('stat-age').innerHTML   = `${age}<span class="text-base font-semibold text-slate-500 ml-1">岁</span>`;
+    document.getElementById('stat-years').innerHTML = `${years}<span class="text-base font-semibold text-slate-500 ml-1">年</span>`;
+  })();
+
+  // 年份
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // 移动端菜单
+  (function initMobileNav() {
+    const toggle = document.getElementById('nav-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('nav-icon');
+    if (!toggle || !menu) return;
+    const open  = () => { menu.classList.remove('hidden'); icon.classList.replace('ri-menu-line','ri-close-line'); };
+    const close = () => { menu.classList.add('hidden');    icon.classList.replace('ri-close-line','ri-menu-line'); };
+    toggle.addEventListener('click', e => { e.stopPropagation(); menu.classList.contains('hidden') ? open() : close(); });
+    menu.addEventListener('click', e => { if (e.target.closest('a')) close(); });
+    document.addEventListener('click', e => { if (!menu.contains(e.target) && e.target !== toggle) close(); });
+    window.addEventListener('resize', () => { if (window.innerWidth >= 768) close(); });
+  })();
+</script>
+
+</body>
+</html>

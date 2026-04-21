@@ -158,14 +158,14 @@ window.FAMILY_DATA = {
     items: [
       {
         id: 'milestones',
-        title: '人生第一次',
-        subtitle: 'First Times',
-        desc: '第一次笑、第一次翻身、第一次叫妈妈……闪闪发光的第一次。',
-        cover: '✨',
-        date: '2024-03-01',
-        tags: ['里程碑'],
-        status: 'plan',
-        href: '#'
+        title: '瑷暄记录 · 人生第一次',
+        subtitle: 'Xuanxuan\'s First Times',
+        desc: '名字由来 + 从 2024.4.19 出生到现在的每一次第一次：第一次翻身、第一次叫妈妈、第一次走路、第一次吹蜡烛……',
+        cover: '🌷',
+        date: '2024-04-19',
+        tags: ['里程碑', '名字由来', '时间线'],
+        status: 'live',
+        href: './apps/growth/milestones.html'
       },
       {
         id: 'growth-curve',
