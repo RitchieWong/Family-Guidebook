@@ -7,7 +7,7 @@ export default function Footer() {
 
   return (
     <footer className="mt-24 bg-gradient-to-br from-slate-900 to-slate-800 text-slate-300">
-      <div className="max-w-6xl mx-auto px-5 py-12 grid md:grid-cols-3 gap-8">
+      <div className="max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] mx-auto px-5 lg:px-8 py-12 grid md:grid-cols-3 gap-8">
         <div>
           <div className="flex items-center gap-2 mb-3">
             <span className="text-2xl">🏡</span>

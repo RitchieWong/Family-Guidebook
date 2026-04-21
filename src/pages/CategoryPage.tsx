@@ -38,7 +38,7 @@ export default function CategoryPage() {
     <>
       {/* Hero */}
       <section className={`bg-gradient-to-br ${accent.grad} text-white`}>
-        <div className="max-w-6xl mx-auto px-5 py-14">
+        <div className="max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] mx-auto px-5 lg:px-8 py-14">
           <Link to="/" className="inline-flex items-center gap-1 text-white/80 text-sm hover:text-white">
             <i className="ri-arrow-left-line" /> 回到首页
           </Link>
@@ -54,7 +54,7 @@ export default function CategoryPage() {
       </section>
 
       {/* Filters */}
-      <section className="max-w-6xl mx-auto px-5 py-6">
+      <section className="max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] mx-auto px-5 lg:px-8 py-6">
         <div className="flex flex-wrap gap-2">
           {(['all', 'live', 'dev', 'plan'] as Filter[]).map(f => {
             const label =
@@ -78,7 +78,7 @@ export default function CategoryPage() {
       </section>
 
       {/* List */}
-      <section className="max-w-6xl mx-auto px-5 pb-20 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <section className="max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] mx-auto px-5 lg:px-8 pb-20 grid md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-5">
         {items.map(item => (
           <ItemCard key={item.id} item={item} />
         ))}

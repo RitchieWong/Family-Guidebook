@@ -8,7 +8,7 @@ export default function Nav() {
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-rose-100/70">
-      <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+      <div className="max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] mx-auto px-5 lg:px-8 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <span className="text-2xl group-hover:rotate-12 transition">🏡</span>
           <span className="font-extrabold tracking-wide cute-zh text-lg bg-gradient-to-r from-rose-500 via-orange-400 to-amber-500 bg-clip-text text-transparent group-hover:from-rose-600 group-hover:to-pink-500 transition">
@@ -59,7 +59,7 @@ export default function Nav() {
 
       {open && (
         <div className="md:hidden border-t border-slate-200/70 bg-white">
-          <div className="max-w-6xl mx-auto px-5 py-3 flex flex-col">
+          <div className="max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] mx-auto px-5 lg:px-8 py-3 flex flex-col">
             <NavLink
               to="/"
               end

@@ -4,7 +4,7 @@ import { formatDate } from '../content/constants'
 
 export default function AlbumListPage() {
   return (
-    <section className="max-w-6xl mx-auto px-5 py-14">
+    <section className="max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] mx-auto px-5 lg:px-8 py-14">
       <Link to="/" className="inline-flex items-center gap-1 text-slate-500 text-sm hover:text-slate-800">
         <i className="ri-arrow-left-line" /> 回到首页
       </Link>
@@ -24,7 +24,7 @@ export default function AlbumListPage() {
           </p>
         </div>
       ) : (
-        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-5">
           {ALBUMS.map(a => (
             <Link
               key={a.id}
