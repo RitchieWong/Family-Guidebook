@@ -1,0 +1,50 @@
+/* 平滑滚动 */
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #0ea5e9, #06b6d4); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #0284c7, #0891b2); }
+
+/* 清单项勾选样式 */
+.check-item {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  user-select: none;
+}
+.check-item:hover { background: rgba(255,255,255,0.1); }
+.check-item.checked {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.check-item::before {
+  content: "☐ ";
+  margin-right: 4px;
+}
+.check-item.checked::before {
+  content: "☑ ";
+}
+
+/* 淡入动画 */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+section { animation: fadeInUp 0.6s ease both; }
+
+/* hero 波浪背景 */
+header::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'><path d='M0 20 Q300 0 600 20 T1200 20 V40 H0 Z' fill='%23f8fafc'/></svg>") no-repeat center/cover;
+}
