@@ -1,18 +1,33 @@
-# IDE
-.idea/
-.vscode/
-*.iml
+# 依赖
+node_modules
+.pnp
+.pnp.js
 
-# macOS
-.DS_Store
+# 构建产物
+dist
+dist-ssr
+.vite
+*.tsbuildinfo
 
-# Logs
-*.log
-npm-debug.log*
-
-# Dependencies
-node_modules/
-
-# Env
+# 环境
 .env
 .env.local
+
+# 日志
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 编辑器
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.local
+
+# 系统
+Thumbs.db
+
+# Hero 背景候选图（迭代过程稿，正式版已存为 public/hero/hero-bg.png）
+public/hero/candidates/
