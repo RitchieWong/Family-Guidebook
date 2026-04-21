@@ -69,8 +69,21 @@ export const CATEGORIES: Record<string, Category> = {
         to: '/travel/2026-labor-day'
       },
       {
+        id: '2025-national-day',
+        title: '国庆 · 江苏带娃游',
+        subtitle: '暄暄 1 岁半 · 第一次坐高铁 + 婚礼 + 江南初遇',
+        desc: '11 天 10 晚的江苏大环线：东台喜宴 → 张家港 → 双山岛 → 南通动物园 → 天目湖 → 一号公路 → 南浔 → 苏州拙政园。',
+        cover: '🚅',
+        date: '2025-10-01',
+        duration: '11天10晚',
+        location: '江苏大环线',
+        tags: ['已成行', '高铁', '自驾', '1 岁半'],
+        status: 'live',
+        to: '/travel/2025-national-day'
+      },
+      {
         id: '2026-national-day',
-        title: '国庆 · 待定',
+        title: '国庆 2026 · 待定',
         subtitle: 'Coming soon',
         desc: '十一长假的下一次冒险，目的地还在全家投票中……',
         cover: '🎋',
