@@ -7,6 +7,7 @@ import Day2 from '../components/travel/sections/Day2'
 import Day3 from '../components/travel/sections/Day3'
 import Day4 from '../components/travel/sections/Day4'
 import TipsChecklist from '../components/travel/sections/TipsChecklist'
+import { scrollToSection } from '../utils/scrollToSection'
 
 const SECTIONS = [
   { id: 'overview', label: '总览' },
@@ -41,16 +42,11 @@ export default function TravelLaborDay2026Page() {
    * 注意：本站使用 HashRouter（URL 形如 /#/travel/...），
    * 所以**不能**用 <a href="#day1">，否则会把整个 hash 替换为 #day1，
    * 触发 HashRouter 重新路由 → 页面跳走 / 报错。
-   * 这里用 JS 滚动到目标元素，并扣掉 sticky 顶部高度。
+   * 这里复用 utils/scrollToSection，统一 offset = 120
+   * （主 Nav 64 + sticky 二级导航 ~48 + 呼吸 8）。
    */
-  const scrollToSection = (id: string) => (e: React.MouseEvent) => {
-    e.preventDefault()
-    const el = document.getElementById(id)
-    if (!el) return
-    // 主 Nav 64 + 二级导航 ~48 + 一点呼吸 = 120
-    const offset = 120
-    const top = el.getBoundingClientRect().top + window.scrollY - offset
-    window.scrollTo({ top, behavior: 'smooth' })
+  const onNavClick = (id: string) => (e: React.MouseEvent) => {
+    scrollToSection(e, id)
   }
 
   return (
@@ -70,7 +66,7 @@ export default function TravelLaborDay2026Page() {
               <a
                 key={s.id}
                 href={`#${s.id}`}
-                onClick={scrollToSection(s.id)}
+                onClick={onNavClick(s.id)}
                 className={`whitespace-nowrap transition ${active === s.id ? 'text-sky-600' : 'hover:text-sky-600'}`}
               >
                 {s.label}

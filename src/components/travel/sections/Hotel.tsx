@@ -1,10 +1,14 @@
 import { useState } from 'react'
+import { amapSearchUrl } from '../../../utils/mapNav'
 
 type Plan = 'a' | 'b'
 
 /** 住宿安排 · 仙随民宿（含方案 A/B 切换） */
 export default function Hotel() {
   const [plan, setPlan] = useState<Plan>('a')
+
+  // 默认使用高德地图：移动端会唤起高德 App，PC 端打开高德网页地图
+  const hotelMapUrl = amapSearchUrl('秦皇岛仙随民宿海滨公园店', '秦皇岛')
 
   return (
     <section id="hotel" className="py-12 bg-gradient-to-b from-white to-sky-50/40 scroll-mt-20">
@@ -16,12 +20,12 @@ export default function Hotel() {
             <p className="text-slate-500 mt-2 text-sm">秦皇岛仙随民宿（海滨公园店）· 2 间标间 + 1 间榻榻米 · 共 3 晚</p>
           </div>
           <a
-            href="https://map.qq.com/?what=%E7%A7%A6%E7%9A%87%E5%B2%9B%E4%BB%99%E9%9A%8F%E6%B0%91%E5%AE%BF%E6%B5%B7%E6%BB%A8%E5%85%AC%E5%9B%AD%E5%BA%97"
+            href={hotelMapUrl}
             target="_blank" rel="noreferrer"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 hover:border-sky-400 hover:shadow-md transition text-sm"
           >
             <i className="ri-map-pin-line text-sky-600" />
-            <span>一键地图导航</span>
+            <span>高德地图导航</span>
           </a>
         </div>
 

@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { DEPARTURE_AT } from '../../../content/travel-2026-labor-day'
+import { scrollToSection } from '../../../utils/scrollToSection'
 
 /** Hero 大图 + 行程总览 */
 export default function HeroOverview() {
@@ -111,15 +112,10 @@ function DayPreview({ href, badgeCls, border, tag, date, title, sub, footIcon, f
   footIcon: string; foot: string; footCls: string
 }) {
   // 站点使用 HashRouter，不能让 <a href="#dayN"> 真的修改 URL hash，
-  // 否则会被 HashRouter 当成路由跳走。这里用 JS 平滑滚动到目标元素，
-  // 并扣掉主 Nav (64) + 二级导航 (~48) + 呼吸 = 120
+  // 否则会被 HashRouter 当成路由跳走。复用统一的 scrollToSection。
   const onClick = (e: React.MouseEvent) => {
-    e.preventDefault()
     const id = href.replace(/^#/, '')
-    const el = document.getElementById(id)
-    if (!el) return
-    const top = el.getBoundingClientRect().top + window.scrollY - 120
-    window.scrollTo({ top, behavior: 'smooth' })
+    scrollToSection(e, id)
   }
   return (
     <a
