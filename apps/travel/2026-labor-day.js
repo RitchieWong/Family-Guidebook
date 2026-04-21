@@ -6,7 +6,7 @@ const checklists = {
     '绘本2-3本', '婴儿浴巾/小脸盆'
   ],
   'list-cloth': [
-    '宝贝长袖T恤×5', '厚薄外套各1件', '连体防风衣',
+    '暄暄长袖T恤×5', '厚薄外套各1件', '连体防风衣',
     '沙滩短裤×3', '防晒帽+泳帽', '防滑沙滩鞋/运动鞋',
     '大人换洗衣物（4天量）', '奶奶保暖外套'
   ],
@@ -17,7 +17,7 @@ const checklists = {
     '垃圾袋×10'
   ],
   'list-doc': [
-    '身份证（大人）', '宝贝户口本/出生证', '驾驶证+行驶证',
+    '身份证（大人）', '暄暄户口本/出生证', '驾驶证+行驶证',
     '租车合同+押金凭证', '现金备用¥500', '车钥匙备用',
     '手机充电宝×2', '车载充电器', '行车记录仪SD卡'
   ]
@@ -92,7 +92,7 @@ renderLists();
   if (days > 0) {
     const hero = document.querySelector('header .inline-flex');
     if (hero) {
-      hero.innerHTML = `<i class="ri-sparkling-2-fill"></i><span>距离出发还有 ${days} 天 · 2岁宝贝 · 三代同堂 · 4天3晚</span>`;
+      hero.innerHTML = `<i class="ri-sparkling-2-fill"></i><span>距离出发还有 ${days} 天 · 2 岁的暄暄 · 三代同堂 · 4天3晚</span>`;
     }
   }
 })();

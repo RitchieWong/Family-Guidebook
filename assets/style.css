@@ -48,3 +48,33 @@ header::after {
   height: 40px;
   background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'><path d='M0 20 Q300 0 600 20 T1200 20 V40 H0 Z' fill='%23f8fafc'/></svg>") no-repeat center/cover;
 }
+
+/* ===== 首页（home.html / index.html 门户）专属样式 ===== */
+.home-body {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(14,165,233,0.06), transparent 40%),
+    radial-gradient(circle at 90% 20%, rgba(251,191,36,0.06), transparent 45%),
+    radial-gradient(circle at 50% 90%, rgba(6,182,212,0.05), transparent 50%),
+    #f8fafc;
+}
+
+/* 首页卡片轻微浮动动画 */
+@keyframes floatY {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-4px); }
+}
+.home-body #app-grid > * {
+  animation: fadeInUp 0.6s ease both;
+}
+.home-body #app-grid > *:nth-child(1) { animation-delay: .02s; }
+.home-body #app-grid > *:nth-child(2) { animation-delay: .08s; }
+.home-body #app-grid > *:nth-child(3) { animation-delay: .14s; }
+.home-body #app-grid > *:nth-child(4) { animation-delay: .20s; }
+.home-body #app-grid > *:nth-child(5) { animation-delay: .26s; }
+.home-body #app-grid > *:nth-child(6) { animation-delay: .32s; }
+
+/* 首页 hero 去掉那条给路书准备的波浪分隔线，换成柔和渐出 */
+.home-body header::after {
+  background: linear-gradient(to bottom, rgba(248,250,252,0), #f8fafc);
+  height: 80px;
+}
