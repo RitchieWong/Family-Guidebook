@@ -32,9 +32,10 @@ Thumbs.db
 # Hero 背景候选图（迭代过程稿，正式版已存为 public/hero/hero-bg.png）
 public/hero/candidates/
 
-# 里程碑原图暂存夹（只追踪脚本生成的 webp，不追踪原图）
-# 使用：把 birth.jpg / full-month.jpg / ... 放进 milestone-source/，
-#       然后跑 npm run build-milestone-photos milestone-source
-milestone-source/*
-!milestone-source/.gitkeep
+# 里程碑原图暂存夹（只追踪目录骨架和说明，不追踪原图本身）
+# 使用：把照片放进对应子目录（1-birth / 2-full-month / ...），
+#       然后跑 npm run build-milestone-photos
+milestone-source/**/*
+!milestone-source/*/
 !milestone-source/README.txt
+!milestone-source/**/.gitkeep
