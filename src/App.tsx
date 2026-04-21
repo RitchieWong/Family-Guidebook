@@ -34,6 +34,7 @@ export default function App() {
           <Route path="/growth/milestones" element={<MilestonesPage />} />
           <Route path="/growth/curve" element={<GrowthCurvePage />} />
           <Route path="/travel/2026-labor-day" element={<TravelLaborDay2026Page />} />
+          <Route path="/travel/2025-national-day" element={<TravelNationalDay2025Page />} />
           <Route path="/album" element={<AlbumListPage />} />
           <Route path="/album/milestones-xuanxuan" element={<MilestoneAlbumPage />} />
           <Route path="/album/:id" element={<AlbumDetailPage />} />
