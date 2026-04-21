@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
 import CategoryPage from './pages/CategoryPage'
 import MilestonesPage from './pages/MilestonesPage'
+import MilestoneAlbumPage from './pages/MilestoneAlbumPage'
 import TravelLaborDay2026Page from './pages/TravelLaborDay2026Page'
 import AlbumListPage from './pages/AlbumListPage'
 import AlbumDetailPage from './pages/AlbumDetailPage'
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/growth/milestones" element={<MilestonesPage />} />
           <Route path="/travel/2026-labor-day" element={<TravelLaborDay2026Page />} />
           <Route path="/album" element={<AlbumListPage />} />
+          <Route path="/album/milestones-xuanxuan" element={<MilestoneAlbumPage />} />
           <Route path="/album/:id" element={<AlbumDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

@@ -93,6 +93,17 @@ export const CATEGORIES: Record<string, Category> = {
     accent: 'cyan',
     items: [
       {
+        id: 'milestones-xuanxuan',
+        title: '暄暄成长里程碑',
+        subtitle: 'The First 730 Days',
+        desc: '出生、满月、百天、周岁、两岁——5 张照片，5 封给暄暄的信。',
+        cover: '🌷',
+        date: '2024-04-19',
+        tags: ['里程碑', '五张图', '家书'],
+        status: 'live',
+        to: '/album/milestones-xuanxuan'
+      },
+      {
         id: 'all-albums',
         title: '全部相册',
         subtitle: 'All Albums',

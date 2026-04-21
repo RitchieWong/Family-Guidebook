@@ -228,7 +228,7 @@ export default function MilestonesPage() {
       </section>
 
       {/* 底部寄语 */}
-      <section className="max-w-5xl mx-auto px-6 pb-16">
+      <section className="max-w-5xl mx-auto px-6 pb-10">
         <div className="rounded-3xl p-8 md:p-12 bg-gradient-to-br from-amber-400 via-rose-400 to-fuchsia-500 text-white text-center relative overflow-hidden shadow-lg">
           <div className="absolute -top-6 -left-6 text-8xl opacity-20 select-none">🌷</div>
           <div className="absolute -bottom-6 -right-6 text-8xl opacity-20 select-none">💌</div>
@@ -246,6 +246,28 @@ export default function MilestonesPage() {
             <div className="mt-6 text-sm opacity-80">—— 爸爸</div>
           </div>
         </div>
+      </section>
+
+      {/* 传送门：照片版里程碑 */}
+      <section className="max-w-5xl mx-auto px-6 pb-16">
+        <Link
+          to="/album/milestones-xuanxuan"
+          className="group block rounded-3xl ring-1 ring-rose-100 bg-white hover:bg-rose-50/50 transition p-6 md:p-8 flex items-center gap-5"
+        >
+          <div className="shrink-0 text-5xl md:text-6xl">🌷</div>
+          <div className="min-w-0 flex-1">
+            <div className="text-xs tracking-[0.25em] font-semibold text-rose-500 uppercase">
+              Photo Edition
+            </div>
+            <div className="mt-1 text-lg md:text-xl font-bold text-slate-800">
+              换个方式看暄暄长大 · 5 张照片的家书
+            </div>
+            <div className="text-sm text-slate-500 mt-1">
+              出生 · 满月 · 百天 · 周岁 · 两岁，5 张节点照片，5 封给暄暄的小信。
+            </div>
+          </div>
+          <i className="ri-arrow-right-line text-xl text-slate-400 group-hover:text-rose-500 group-hover:translate-x-1 transition" />
+        </Link>
       </section>
     </>
   )

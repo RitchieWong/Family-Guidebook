@@ -30,13 +30,12 @@ export default function TravelLaborDay2026Page() {
       // 但 DOM 里 hotel 紧跟 overview，排在 day1 之前）。
       // 必须按实际 offsetTop 升序遍历，取"最后一个已经越过 y 的 section"，
       // 否则滚到 day1~day4 时，因 hotel.offsetTop 很小也 <= y，会被最后一次覆盖为 hotel。
-      const items = SECTIONS
-        .map((s) => {
-          const el = document.getElementById(s.id)
-          return el ? { id: s.id, top: el.offsetTop } : null
-        })
-        .filter((v): v is { id: string; top: number } => v !== null)
-        .sort((a, b) => a.top - b.top)
+      const items: Array<{ id: string; top: number }> = []
+      for (const s of SECTIONS) {
+        const el = document.getElementById(s.id)
+        if (el) items.push({ id: s.id, top: el.offsetTop })
+      }
+      items.sort((a, b) => a.top - b.top)
 
       let cur = items[0]?.id ?? (SECTIONS[0].id as string)
       for (const it of items) {
