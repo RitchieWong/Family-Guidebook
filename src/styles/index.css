@@ -13,15 +13,17 @@ body,
 }
 
 /*
- * 防止子像素渲染 / 旋转贴纸卡偶发触发横向滚动条。
+ * ⚠️ 不要在 html / body 上设置 overflow-x: hidden！
  *
- * ⚠️ 只在 body 上设，不要再加到 html！
- * 同时给 html 和 body 设 overflow-x: hidden 会让 html 失去滚动 root，
- * 进而导致 position: sticky 在子组件里失效（路书页二级导航不再固定）。
+ * iOS Safari 对 position: sticky 非常严格：只要 sticky 元素的任意祖先
+ * （哪怕隔多层）有 overflow: hidden / auto / scroll，sticky 就会失效。
+ * 这会导致移动端主 Nav（sticky top-0）和路书二级导航（sticky top-16）
+ * 都不再固定。
+ *
+ * 如果某个 section 的装饰元素会横向溢出，请在**该 section 本身**加
+ * overflow-hidden（例如 Hero section 已经在 <section className="overflow-hidden">
+ * 上裁切），而不是在 body 级一刀切。
  */
-body {
-  overflow-x: hidden;
-}
 
 body {
   background: #fff7f2;
