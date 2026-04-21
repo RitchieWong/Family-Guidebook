@@ -35,11 +35,12 @@ export const CATEGORIES: Record<string, Category> = {
         id: 'growth-curve',
         title: '成长曲线',
         subtitle: 'Growth Curve',
-        desc: '身高体重按月记录，和标准曲线对比一下。',
+        desc: '身高、体重按次记录，和 WHO 女童 P50 中位数对比。出生 3.7kg/52cm → 2 岁 12.5kg/88.5cm。',
         cover: '📈',
-        date: '2024-04-01',
-        tags: ['数据'],
-        status: 'plan'
+        date: '2024-04-19',
+        tags: ['数据', 'WHO 参考'],
+        status: 'live',
+        to: '/growth/curve'
       }
     ]
   },

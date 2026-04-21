@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import CategoryPage from './pages/CategoryPage'
 import MilestonesPage from './pages/MilestonesPage'
 import MilestoneAlbumPage from './pages/MilestoneAlbumPage'
+import GrowthCurvePage from './pages/GrowthCurvePage'
 import TravelLaborDay2026Page from './pages/TravelLaborDay2026Page'
 import AlbumListPage from './pages/AlbumListPage'
 import AlbumDetailPage from './pages/AlbumDetailPage'
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/category/:id" element={<CategoryPage />} />
           <Route path="/growth/milestones" element={<MilestonesPage />} />
+          <Route path="/growth/curve" element={<GrowthCurvePage />} />
           <Route path="/travel/2026-labor-day" element={<TravelLaborDay2026Page />} />
           <Route path="/album" element={<AlbumListPage />} />
           <Route path="/album/milestones-xuanxuan" element={<MilestoneAlbumPage />} />
