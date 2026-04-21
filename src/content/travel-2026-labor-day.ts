@@ -74,3 +74,29 @@ export const CHECKLIST_GROUPS: ChecklistGroup[] = [
 
 /** 出发目标时间，用于倒计时 */
 export const DEPARTURE_AT = '2026-04-29T14:00:00'
+
+/* ============================================================
+ * 路书涉及的地点（导航用）
+ *
+ * 高德 URI navigation 接口要求经纬度（GCJ-02 高德坐标系），
+ * 不能只传地址字符串。坐标拾取方式：
+ *   1) 打开 https://lbs.amap.com/tools/picker
+ *   2) 搜索目的地名称，地图上点中确认
+ *   3) 把右侧的"经度,纬度"复制过来
+ *
+ * 没填坐标也不会报错——会自动退回到"高德搜索页 + 完整地址"。
+ * ============================================================ */
+import type { Place } from '../utils/mapNav'
+
+export const PLACES = {
+  /** 全程唯一住宿 · 仙随民宿海滨公园店 */
+  hotelXianSui: {
+    name: '秦皇岛仙随民宿（海滨公园店）',
+    address: '河北省秦皇岛市北戴河区河东寨西街47号',
+    city: '秦皇岛',
+    // TODO: 用 https://lbs.amap.com/tools/picker 拾取后填入
+    // lng: 119.xxxxxx,
+    // lat: 39.xxxxxx,
+  } satisfies Place,
+} as const
+

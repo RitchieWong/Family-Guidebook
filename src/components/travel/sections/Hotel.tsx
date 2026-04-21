@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { amapSearchUrl } from '../../../utils/mapNav'
+import { amapNavigateUrl } from '../../../utils/mapNav'
+import { PLACES } from '../../../content/travel-2026-labor-day'
 
 type Plan = 'a' | 'b'
 
@@ -7,8 +8,10 @@ type Plan = 'a' | 'b'
 export default function Hotel() {
   const [plan, setPlan] = useState<Plan>('a')
 
-  // 默认使用高德地图：移动端会唤起高德 App，PC 端打开高德网页地图
-  const hotelMapUrl = amapSearchUrl('秦皇岛仙随民宿海滨公园店', '秦皇岛')
+  // 默认使用高德地图：
+  //  - 数据里填了经纬度 → 直接进高德"驾车导航"页（移动端唤起 App）
+  //  - 没填坐标 → 自动退化为"搜索 + 完整地址"，命中后用户再点"到这里"
+  const hotelMapUrl = amapNavigateUrl({ to: PLACES.hotelXianSui })
 
   return (
     <section id="hotel" className="py-12 bg-gradient-to-b from-white to-sky-50/40 scroll-mt-20">
@@ -38,10 +41,16 @@ export default function Hotel() {
                 <i className="ri-home-heart-fill" /> 全程唯一住宿地
               </div>
               <h3 className="text-2xl md:text-3xl font-black mb-2">秦皇岛仙随民宿 · 海滨公园店</h3>
-              <div className="flex items-start gap-2 text-sm opacity-90 mb-4">
+              <a
+                href={hotelMapUrl}
+                target="_blank" rel="noreferrer"
+                className="flex items-start gap-2 text-sm opacity-90 mb-4 hover:opacity-100 hover:underline underline-offset-4 decoration-white/60"
+                title="点击在高德地图打开"
+              >
                 <i className="ri-map-pin-2-line mt-0.5 flex-shrink-0" />
                 <span>河北省秦皇岛市北戴河区河东寨西街47号</span>
-              </div>
+                <i className="ri-external-link-line mt-0.5 opacity-70" />
+              </a>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
                 <Stat n="3" label="间房" />
                 <Stat n="3" label="晚" />

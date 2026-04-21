@@ -12,8 +12,13 @@ body,
   min-height: 100%;
 }
 
-/* 防止子像素渲染 / 旋转贴纸卡偶发触发横向滚动条 */
-html,
+/*
+ * 防止子像素渲染 / 旋转贴纸卡偶发触发横向滚动条。
+ *
+ * ⚠️ 只在 body 上设，不要再加到 html！
+ * 同时给 html 和 body 设 overflow-x: hidden 会让 html 失去滚动 root，
+ * 进而导致 position: sticky 在子组件里失效（路书页二级导航不再固定）。
+ */
 body {
   overflow-x: hidden;
 }
