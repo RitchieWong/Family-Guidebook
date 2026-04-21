@@ -12,6 +12,12 @@ body,
   min-height: 100%;
 }
 
+/* 防止子像素渲染 / 旋转贴纸卡偶发触发横向滚动条 */
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   background: #fff7f2;
   color: #1e293b;
@@ -25,12 +31,24 @@ body {
   width: 10px;
   height: 10px;
 }
+::-webkit-scrollbar-track {
+  background: #fff7f2; /* 与 body 同色，避免出现深色"黑边" */
+}
 ::-webkit-scrollbar-thumb {
   background: #fbcfe8;
   border-radius: 6px;
+  border: 2px solid #fff7f2; /* 让 thumb 看起来更细致 */
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #f472b6;
+}
+::-webkit-scrollbar-corner {
+  background: #fff7f2;
+}
+/* Firefox */
+html {
+  scrollbar-color: #fbcfe8 #fff7f2;
+  scrollbar-width: thin;
 }
 
 /* ====== 首页装饰 ====== */
