@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   MILESTONE_ALBUM_META,
@@ -6,24 +6,42 @@ import {
   SEASON_BADGE,
   STORY_BG,
   type MilestoneStory,
+  type GalleryPhoto,
 } from '../content/milestone-album'
 import { MILESTONES } from '../content/milestones'
 import { formatDate } from '../content/constants'
 import { scrollToSection } from '../utils/scrollToSection'
 
+interface LightboxState {
+  images: string[]
+  index: number
+}
+
 export default function MilestoneAlbumPage() {
+  const [lightbox, setLightbox] = useState<LightboxState | null>(null)
+
   return (
     <div className="bg-[#fff7f2]">
-      {/* 顶部 Hero */}
       <Hero />
 
-      {/* 5 段叙事 */}
       {MILESTONE_STORIES.map((s, idx) => (
-        <StorySection key={s.id} story={s} index={idx} />
+        <StorySection
+          key={s.id}
+          story={s}
+          index={idx}
+          onOpenLightbox={(images, index) => setLightbox({ images, index })}
+        />
       ))}
 
-      {/* 底部尾签 */}
       <FooterLetter />
+
+      {lightbox && (
+        <Lightbox
+          state={lightbox}
+          onClose={() => setLightbox(null)}
+          onChange={(next) => setLightbox(next)}
+        />
+      )}
     </div>
   )
 }
@@ -42,7 +60,6 @@ function Hero() {
       </div>
 
       <div className="relative max-w-5xl mx-auto px-5 lg:px-8 pt-10 pb-14">
-        {/* 面包屑 */}
         <nav className="flex items-center gap-2 text-sm text-slate-500 mb-5 flex-wrap">
           <Link to="/" className="hover:text-rose-600 inline-flex items-center gap-1">
             <i className="ri-home-4-line" /> 首页
@@ -52,20 +69,16 @@ function Hero() {
             家庭相册
           </Link>
           <i className="ri-arrow-right-s-line" />
-          <span className="text-slate-700 font-medium">
-            {MILESTONE_ALBUM_META.title}
-          </span>
+          <span className="text-slate-700 font-medium">{MILESTONE_ALBUM_META.title}</span>
         </nav>
 
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/70 backdrop-blur ring-1 ring-rose-200 text-rose-700 text-xs font-semibold mb-4">
           <i className="ri-heart-3-fill" />
-          <span>5 张照片 · 5 封家书</span>
+          <span>5 个节点 · 5 封家书 · 一路走来的那些瞬间</span>
         </div>
 
         <h1 className="text-4xl md:text-6xl font-black leading-tight">
-          <span className="handwrite text-slate-800">
-            {MILESTONE_ALBUM_META.title}
-          </span>
+          <span className="handwrite text-slate-800">{MILESTONE_ALBUM_META.title}</span>
         </h1>
         <div className="mt-2 text-sm md:text-base tracking-[0.3em] text-rose-500 font-semibold uppercase">
           {MILESTONE_ALBUM_META.subtitle}
@@ -74,7 +87,6 @@ function Hero() {
           {MILESTONE_ALBUM_META.description}
         </p>
 
-        {/* 5 张小胶囊快速导航 */}
         <div className="mt-8 flex flex-wrap gap-2">
           {MILESTONE_STORIES.map((s) => (
             <a
@@ -87,6 +99,11 @@ function Hero() {
                 {s.order}
               </span>
               <span>{s.stage}</span>
+              {s.gallery.length > 0 && (
+                <span className="text-[10px] text-slate-400 group-hover:text-rose-400">
+                  · {s.gallery.length + 1}
+                </span>
+              )}
             </a>
           ))}
         </div>
@@ -96,10 +113,17 @@ function Hero() {
 }
 
 // ========================================================================
-// 单张节点叙事（左右交替）
+// 单张节点叙事（主图 + 家书 + 画廊）
 // ========================================================================
-function StorySection({ story, index }: { story: MilestoneStory; index: number }) {
-  // 奇偶决定照片在左还是右（偶数左 / 奇数右）
+function StorySection({
+  story,
+  index,
+  onOpenLightbox,
+}: {
+  story: MilestoneStory
+  index: number
+  onOpenLightbox: (images: string[], index: number) => void
+}) {
   const imageOnLeft = index % 2 === 0
 
   const linked = useMemo(
@@ -109,6 +133,14 @@ function StorySection({ story, index }: { story: MilestoneStory; index: number }
         .filter((v): v is (typeof MILESTONES)[number] => Boolean(v)),
     [story.linkedDates]
   )
+
+  // 主图 + 画廊 src 集合（给 lightbox 用）
+  const allImages = useMemo(() => {
+    const arr: string[] = []
+    if (story.imageSrc) arr.push(story.imageSrc)
+    story.gallery.forEach((g) => arr.push(g.src))
+    return arr
+  }, [story.imageSrc, story.gallery])
 
   return (
     <section
@@ -121,12 +153,14 @@ function StorySection({ story, index }: { story: MilestoneStory; index: number }
             imageOnLeft ? '' : 'md:[&>:first-child]:order-2'
           }`}
         >
-          {/* 图片 */}
-          <PhotoCard story={story} />
+          <PhotoCard
+            story={story}
+            onOpen={() => {
+              if (allImages.length > 0) onOpenLightbox(allImages, 0)
+            }}
+          />
 
-          {/* 文字卡片 */}
           <div className="min-w-0">
-            {/* 顺序徽章 */}
             <div className="flex items-center gap-2 mb-3">
               <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-900 text-white text-sm font-bold shadow">
                 {story.order}
@@ -136,7 +170,6 @@ function StorySection({ story, index }: { story: MilestoneStory; index: number }
               </span>
             </div>
 
-            {/* 元信息行 */}
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <span className="inline-flex items-center gap-1 text-xs text-slate-500">
                 <i className="ri-calendar-event-line" />
@@ -154,20 +187,16 @@ function StorySection({ story, index }: { story: MilestoneStory; index: number }
               </span>
             </div>
 
-            {/* 标题（手写体大字） */}
             <h2 className="handwrite text-3xl md:text-4xl font-black text-slate-800 leading-tight mb-4">
               {story.title}
             </h2>
 
-            {/* 数据卡 */}
             <StatsBar story={story} />
 
-            {/* 家书正文 */}
             <p className="mt-5 text-slate-700 leading-[1.9] text-[15px] md:text-base">
               {story.letter}
             </p>
 
-            {/* 关联里程碑 */}
             {linked.length > 0 && (
               <div className="mt-6 rounded-2xl bg-white/60 backdrop-blur ring-1 ring-white px-4 py-3">
                 <div className="text-[11px] font-bold text-slate-500 tracking-wider uppercase mb-2">
@@ -190,95 +219,119 @@ function StorySection({ story, index }: { story: MilestoneStory; index: number }
             )}
           </div>
         </div>
+
+        {/* 画廊 */}
+        {story.gallery.length > 0 && (
+          <Gallery
+            stage={story.stage}
+            items={story.gallery}
+            onOpen={(idx) => onOpenLightbox(allImages, idx + (story.imageSrc ? 1 : 0))}
+          />
+        )}
       </div>
     </section>
   )
 }
 
 // ========================================================================
-// 照片卡片（含 fallback）
+// 主图卡
 // ========================================================================
-function PhotoCard({ story }: { story: MilestoneStory }) {
+function PhotoCard({ story, onOpen }: { story: MilestoneStory; onOpen: () => void }) {
   const [errored, setErrored] = useState(false)
-  const [lightbox, setLightbox] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
   const hasImage = Boolean(story.image) && !errored
 
   return (
-    <>
-      <div ref={ref} className="relative">
-        {/* 装饰：一个小胶带 */}
-        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-20 h-5 rounded-sm bg-amber-200/70 rotate-[-2deg] shadow-sm z-10" />
+    <div className="relative">
+      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-20 h-5 rounded-sm bg-amber-200/70 rotate-[-2deg] shadow-sm z-10" />
 
-        <button
-          type="button"
-          onClick={() => hasImage && setLightbox(true)}
-          className={`relative w-full aspect-[3/4] rounded-[28px] overflow-hidden bg-white ring-1 ring-slate-200 shadow-[0_20px_50px_-20px_rgba(244,63,94,0.25)] ${
-            hasImage ? 'cursor-zoom-in' : 'cursor-default'
-          }`}
-          aria-label={hasImage ? '查看大图' : undefined}
-        >
-          {hasImage ? (
-            <img
-              src={story.image}
-              alt={`${story.stage} · ${story.title}`}
-              loading="lazy"
-              onError={() => setErrored(true)}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-slate-400 bg-gradient-to-br from-slate-50 to-white">
-              <div className="text-7xl opacity-60">{story.fallbackEmoji}</div>
-              <div className="text-xs tracking-widest">照片待补</div>
-              <div className="text-[10px] text-slate-300">
-                {story.stage} · {formatDate(story.date)}
-              </div>
-            </div>
-          )}
-
-          {/* 右下角手写水印（仅有图时显示） */}
-          {hasImage && (
-            <div className="absolute bottom-3 right-4 handwrite text-white text-right text-sm md:text-base leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)] select-none pointer-events-none">
-              <div>{formatDate(story.date)}</div>
-              {story.stats.weight && story.stats.weight !== '—' && (
-                <div className="text-xs md:text-sm">{story.stats.weight}</div>
-              )}
-              {story.stats.height && story.stats.height !== '—' && (
-                <div className="text-xs md:text-sm">{story.stats.height}</div>
-              )}
-            </div>
-          )}
-        </button>
-
-        {/* 顺序大数字（装饰） */}
-        <div className="absolute -bottom-6 -right-2 handwrite text-[100px] leading-none text-rose-200/50 select-none pointer-events-none">
-          {story.order}
-        </div>
-      </div>
-
-      {/* lightbox */}
-      {lightbox && hasImage && (
-        <div
-          className="fixed inset-0 z-[60] bg-black/85 flex items-center justify-center p-4"
-          onClick={() => setLightbox(false)}
-        >
+      <button
+        type="button"
+        onClick={() => hasImage && onOpen()}
+        className={`relative w-full aspect-[3/4] rounded-[28px] overflow-hidden bg-white ring-1 ring-slate-200 shadow-[0_20px_50px_-20px_rgba(244,63,94,0.25)] ${
+          hasImage ? 'cursor-zoom-in' : 'cursor-default'
+        }`}
+        aria-label={hasImage ? '查看大图' : undefined}
+      >
+        {hasImage ? (
           <img
             src={story.image}
-            alt=""
-            className="max-w-full max-h-full object-contain rounded-lg"
+            alt={`${story.stage} · ${story.title}`}
+            loading="lazy"
+            onError={() => setErrored(true)}
+            className="w-full h-full object-cover"
           />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-slate-400 bg-gradient-to-br from-slate-50 to-white">
+            <div className="text-7xl opacity-60">{story.fallbackEmoji}</div>
+            <div className="text-xs tracking-widest">照片待补</div>
+            <div className="text-[10px] text-slate-300">
+              {story.stage} · {formatDate(story.date)}
+            </div>
+          </div>
+        )}
+
+        {hasImage && (
+          <div className="absolute bottom-3 right-4 handwrite text-white text-right text-sm md:text-base leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)] select-none pointer-events-none">
+            <div>{formatDate(story.date)}</div>
+            {story.stats.weight && story.stats.weight !== '—' && (
+              <div className="text-xs md:text-sm">{story.stats.weight}</div>
+            )}
+            {story.stats.height && story.stats.height !== '—' && (
+              <div className="text-xs md:text-sm">{story.stats.height}</div>
+            )}
+          </div>
+        )}
+      </button>
+
+      <div className="absolute -bottom-6 -right-2 handwrite text-[100px] leading-none text-rose-200/50 select-none pointer-events-none">
+        {story.order}
+      </div>
+    </div>
+  )
+}
+
+// ========================================================================
+// 画廊（小图网格）
+// ========================================================================
+function Gallery({
+  stage,
+  items,
+  onOpen,
+}: {
+  stage: string
+  items: GalleryPhoto[]
+  onOpen: (index: number) => void
+}) {
+  return (
+    <div className="mt-12 md:mt-16">
+      <div className="flex items-center gap-2 mb-4">
+        <i className="ri-image-line text-slate-400" />
+        <span className="text-xs tracking-[0.25em] font-semibold text-slate-500 uppercase">
+          {stage} · 那些瞬间
+        </span>
+        <span className="text-xs text-slate-400">共 {items.length} 张</span>
+        <div className="flex-1 h-px bg-slate-200/70 ml-3" />
+      </div>
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-3">
+        {items.map((g, i) => (
           <button
+            key={g.thumb}
             type="button"
-            className="absolute top-5 right-5 text-white/80 hover:text-white"
-            onClick={() => setLightbox(false)}
-            aria-label="关闭"
+            onClick={() => onOpen(i)}
+            className="group relative aspect-square rounded-xl overflow-hidden bg-slate-100 ring-1 ring-slate-200 hover:ring-rose-300 transition shadow-sm cursor-zoom-in"
+            aria-label={`查看第 ${i + 1} 张`}
           >
-            <i className="ri-close-line text-3xl" />
+            <img
+              src={g.thumb}
+              alt={`${stage} ${i + 1}`}
+              loading="lazy"
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+            />
+            <div className="absolute inset-0 ring-0 group-hover:ring-4 group-hover:ring-rose-300/30 transition pointer-events-none" />
           </button>
-        </div>
-      )}
-    </>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -314,6 +367,94 @@ function StatsBar({ story }: { story: MilestoneStory }) {
 }
 
 // ========================================================================
+// Lightbox（支持左右切换 + 键盘）
+// ========================================================================
+function Lightbox({
+  state,
+  onClose,
+  onChange,
+}: {
+  state: LightboxState
+  onClose: () => void
+  onChange: (next: LightboxState) => void
+}) {
+  const { images, index } = state
+  const total = images.length
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      else if (e.key === 'ArrowLeft') {
+        onChange({ images, index: (index - 1 + total) % total })
+      } else if (e.key === 'ArrowRight') {
+        onChange({ images, index: (index + 1) % total })
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [images, index, total, onClose, onChange])
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <img
+        src={images[index]}
+        alt=""
+        className="max-w-full max-h-full object-contain rounded-lg"
+        onClick={(e) => e.stopPropagation()}
+      />
+
+      {total > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onChange({ images, index: (index - 1 + total) % total })
+            }}
+            className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-2xl backdrop-blur transition"
+            aria-label="上一张"
+          >
+            <i className="ri-arrow-left-s-line" />
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onChange({ images, index: (index + 1) % total })
+            }}
+            className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-2xl backdrop-blur transition"
+            aria-label="下一张"
+          >
+            <i className="ri-arrow-right-s-line" />
+          </button>
+        </>
+      )}
+
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          onClose()
+        }}
+        className="absolute top-5 right-5 text-white/80 hover:text-white"
+        aria-label="关闭"
+      >
+        <i className="ri-close-line text-3xl" />
+      </button>
+
+      {total > 1 && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-white/15 text-white text-xs backdrop-blur">
+          {index + 1} / {total}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ========================================================================
 // 底部尾签
 // ========================================================================
 function FooterLetter() {
@@ -340,7 +481,6 @@ function FooterLetter() {
           </div>
         </div>
 
-        {/* 返回入口 */}
         <div className="mt-10 flex items-center justify-center gap-4 text-sm">
           <Link
             to="/category/album"

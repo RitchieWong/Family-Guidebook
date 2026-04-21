@@ -3,43 +3,49 @@
  * 暄暄成长里程碑 · 专用照片处理脚本
  * -----------------------------------------------------------
  * 用法：
- *   npm run build-milestone-photos                    # 读默认 milestone-source/
- *   npm run build-milestone-photos <sourceDir>        # 自定义源目录
+ *   npm run build-milestone-photos                 # 读默认 milestone-source/
+ *   npm run build-milestone-photos <sourceDir>     # 自定义源目录
  *
- * 源目录结构（推荐）：
+ * 源目录结构（约定）：
  *   milestone-source/
- *   ├── 1-birth/            → 出生
- *   ├── 2-full-month/       → 满月
- *   ├── 3-hundred-days/     → 百天
- *   ├── 4-one-year/         → 周岁
- *   └── 5-two-years/        → 两岁
+ *   ├── 1-birth/
+ *   │   ├── 主图.jpg          ← 必须命名为「主图」的文件，作为该节点主图
+ *   │   └── xxx.jpeg          ← 其余图自动成为画廊图（按文件名排序）
+ *   ├── 2-full-month/
+ *   │   └── ...
+ *   └── 5-two-years/
  *
- *   每个子目录里放任意文件名的图片，脚本会按文件名排序，取第一张
- *   作为该节点主图；支持 jpg/jpeg/png/heic/webp。
- *
- * 兼容旧版：
- *   如果子目录不存在，脚本会退回到扁平模式——扫描源目录下
- *   birth.* / full-month.* / hundred-days.* / one-year.* / two-years.*
+ *   支持格式：jpg/jpeg/png/heic/webp。
+ *   如果没有「主图.*」，会退回到「按文件名排序取第一张」逻辑。
  *
  * 输出：
  *   public/photos/milestones-xuanxuan/
- *     ├── thumb/   480px  webp q75
- *     ├── medium/  1280px webp q82   ← 页面代码默认引用
- *     └── src/     原尺寸  webp q85   ← lightbox 查看大图
+ *     ├── cover/       1280px webp q85  主图（页面主视觉）
+ *     ├── cover-thumb/ 480px  webp q75  主图缩略
+ *     ├── cover-src/   原尺寸 webp q85  主图 lightbox 原图
+ *     └── gallery/<id>/
+ *         ├── 01-medium.webp  /  01-thumb.webp  /  01-src.webp
+ *         └── ...             （画廊图，一张图三档）
  *
- * 跑完不需要改任何代码，提交 public/photos/milestones-xuanxuan/ 即可上线。
+ * 节点页面代码只需要引用：
+ *   story.image          = /photos/milestones-xuanxuan/cover/<id>.webp
+ *   story.gallery[n].src = /photos/milestones-xuanxuan/gallery/<id>/01-medium.webp
  */
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import url from 'node:url'
+import os from 'node:os'
 import process from 'node:process'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
+
+const execFileP = promisify(execFile)
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 const OUT_ROOT = path.join(ROOT, 'public/photos/milestones-xuanxuan')
 const DEFAULT_SRC = path.join(ROOT, 'milestone-source')
 
-/** 节点 id → 子目录名 */
 const NODES = [
   { id: 'birth',        dir: '1-birth',        stage: '出生' },
   { id: 'full-month',   dir: '2-full-month',   stage: '满月' },
@@ -48,6 +54,7 @@ const NODES = [
   { id: 'two-years',    dir: '5-two-years',    stage: '两岁' },
 ]
 const EXT = /\.(jpe?g|png|heic|webp)$/i
+const COVER_RE = /^(主图|cover)\.(jpe?g|png|heic|webp)$/i
 
 async function main() {
   const customDir = process.argv[2]
@@ -69,77 +76,123 @@ async function main() {
     process.exit(1)
   }
 
-  console.log(`📁 源目录: ${path.relative(ROOT, srcAbs) || srcAbs}`)
+  console.log(`📁 源目录: ${path.relative(ROOT, srcAbs) || srcAbs}\n`)
 
-  await fs.mkdir(path.join(OUT_ROOT, 'thumb'), { recursive: true })
-  await fs.mkdir(path.join(OUT_ROOT, 'medium'), { recursive: true })
-  await fs.mkdir(path.join(OUT_ROOT, 'src'), { recursive: true })
+  // 先清理旧输出（只清我们管的三个子目录，避免遗留文件）
+  await clean(path.join(OUT_ROOT, 'cover'))
+  await clean(path.join(OUT_ROOT, 'cover-thumb'))
+  await clean(path.join(OUT_ROOT, 'cover-src'))
+  await clean(path.join(OUT_ROOT, 'gallery'))
 
-  const done = []
+  await fs.mkdir(path.join(OUT_ROOT, 'cover'), { recursive: true })
+  await fs.mkdir(path.join(OUT_ROOT, 'cover-thumb'), { recursive: true })
+  await fs.mkdir(path.join(OUT_ROOT, 'cover-src'), { recursive: true })
+  await fs.mkdir(path.join(OUT_ROOT, 'gallery'), { recursive: true })
+
+  const report = []
   for (const node of NODES) {
-    const picked = await pickPhoto(srcAbs, node)
-    if (!picked) {
-      console.log(`⏭  [${node.stage}] 跳过（没找到照片）`)
+    const subDir = path.join(srcAbs, node.dir)
+    const subStat = await fs.stat(subDir).catch(() => null)
+    if (!subStat || !subStat.isDirectory()) {
+      console.log(`⏭  [${node.stage}] 跳过（目录不存在）`)
       continue
     }
-    const outName = `${node.id}.webp`
-    console.log(`✨ [${node.stage}] ${path.relative(srcAbs, picked)}`)
 
-    await sharp(picked)
+    const files = (await fs.readdir(subDir))
+      .filter((f) => EXT.test(f) && !f.startsWith('.'))
+
+    if (files.length === 0) {
+      console.log(`⏭  [${node.stage}] 跳过（目录里没有照片）`)
+      continue
+    }
+
+    // 分出主图 vs 画廊
+    const coverFile = files.find((f) => COVER_RE.test(f)) || files.sort()[0]
+    const galleryFiles = files
+      .filter((f) => f !== coverFile)
+      .sort((a, b) => a.localeCompare(b))
+
+    console.log(`\n✨ [${node.stage}] 主图: ${coverFile}  | 画廊: ${galleryFiles.length} 张`)
+
+    // 处理主图
+    const coverIn = path.join(subDir, coverFile)
+    const coverName = `${node.id}.webp`
+    await sharp(coverIn)
+      .rotate()
+      .resize({ width: 1280, withoutEnlargement: true })
+      .webp({ quality: 85 })
+      .toFile(path.join(OUT_ROOT, 'cover', coverName))
+    await sharp(coverIn)
       .rotate()
       .resize({ width: 480, withoutEnlargement: true })
       .webp({ quality: 75 })
-      .toFile(path.join(OUT_ROOT, 'thumb', outName))
-
-    await sharp(picked)
-      .rotate()
-      .resize({ width: 1280, withoutEnlargement: true })
-      .webp({ quality: 82 })
-      .toFile(path.join(OUT_ROOT, 'medium', outName))
-
-    await sharp(picked)
+      .toFile(path.join(OUT_ROOT, 'cover-thumb', coverName))
+    await sharp(coverIn)
       .rotate()
       .webp({ quality: 85 })
-      .toFile(path.join(OUT_ROOT, 'src', outName))
+      .toFile(path.join(OUT_ROOT, 'cover-src', coverName))
 
-    done.push(node.stage)
+    // 处理画廊
+    const nodeGalleryDir = path.join(OUT_ROOT, 'gallery', node.id)
+    await fs.mkdir(nodeGalleryDir, { recursive: true })
+    const galleryItems = []
+    let i = 1
+    for (const gf of galleryFiles) {
+      const seq = String(i).padStart(2, '0')
+      const input = await ensureDecodable(path.join(subDir, gf))
+      await sharp(input)
+        .rotate()
+        .resize({ width: 800, withoutEnlargement: true })
+        .webp({ quality: 80 })
+        .toFile(path.join(nodeGalleryDir, `${seq}-medium.webp`))
+      await sharp(input)
+        .rotate()
+        .resize({ width: 320, withoutEnlargement: true })
+        .webp({ quality: 72 })
+        .toFile(path.join(nodeGalleryDir, `${seq}-thumb.webp`))
+      await sharp(input)
+        .rotate()
+        .webp({ quality: 85 })
+        .toFile(path.join(nodeGalleryDir, `${seq}-src.webp`))
+      galleryItems.push(seq)
+      i++
+    }
+
+    report.push({ stage: node.stage, cover: coverFile, gallery: galleryItems.length })
   }
 
-  console.log(`\n✅ 完成 ${done.length}/${NODES.length} 张 → public/photos/milestones-xuanxuan/`)
-  console.log(`   已处理：${done.join('、') || '（无）'}`)
-  if (done.length < NODES.length) {
-    const missing = NODES.filter((n) => !done.includes(n.stage)).map((n) => n.stage)
-    console.log(`   未处理：${missing.join('、')}（稍后补照片再跑一次即可）`)
+  console.log('\n──────────── 汇总 ────────────')
+  for (const r of report) {
+    console.log(`  ✅ ${r.stage.padEnd(4, ' ')} · 主图 1 张 · 画廊 ${r.gallery} 张`)
   }
   console.log('\n👉 接下来：')
   console.log('   git add public/photos/milestones-xuanxuan/')
-  console.log('   git commit -m "chore(photos): update milestone photos"')
+  console.log('   git commit -m "chore(photos): build milestone cover + gallery"')
   console.log('   git push')
 }
 
+async function clean(dir) {
+  await fs.rm(dir, { recursive: true, force: true })
+}
+
 /**
- * 优先在节点子目录里找第一张图；找不到再回退到扁平命名模式。
+ * sharp 在 macOS 上默认不带 HEIC 解码器，遇到 .heic 先用系统 `sips`
+ * 转成临时 jpg，再交给 sharp。非 HEIC 直接原路径返回。
  */
-async function pickPhoto(srcAbs, node) {
-  // 1) 子目录模式
-  const subDir = path.join(srcAbs, node.dir)
-  const subStat = await fs.stat(subDir).catch(() => null)
-  if (subStat && subStat.isDirectory()) {
-    const files = (await fs.readdir(subDir))
-      .filter((f) => EXT.test(f) && !f.startsWith('.'))
-      .sort((a, b) => a.localeCompare(b))
-    if (files.length > 0) return path.join(subDir, files[0])
+const TMP_DIR = path.join(os.tmpdir(), 'milestone-heic-cache')
+async function ensureDecodable(inputPath) {
+  if (!/\.heic$/i.test(inputPath)) return inputPath
+  await fs.mkdir(TMP_DIR, { recursive: true })
+  const base = path.basename(inputPath).replace(/\.heic$/i, '.jpg')
+  const out = path.join(TMP_DIR, `${Date.now()}-${base}`)
+  try {
+    await execFileP('sips', ['-s', 'format', 'jpeg', inputPath, '--out', out])
+    return out
+  } catch (e) {
+    console.error(`⚠️  HEIC 解码失败（跳过）: ${inputPath}`)
+    console.error(`    ${e.message}`)
+    throw e
   }
-
-  // 2) 扁平模式回退：srcAbs 下 <id>.* 或 <id>-*.*
-  const flat = (await fs.readdir(srcAbs)).filter((f) => EXT.test(f))
-  const hit = flat.find((f) => {
-    const lower = f.toLowerCase()
-    return lower.startsWith(`${node.id}.`) || lower.startsWith(`${node.id}-`)
-  })
-  if (hit) return path.join(srcAbs, hit)
-
-  return null
 }
 
 main().catch((e) => {
