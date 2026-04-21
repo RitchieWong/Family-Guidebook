@@ -66,8 +66,8 @@ document.getElementById('reset-btn')?.addEventListener('click', () => {
 // 导航高亮
 const navLinks = document.querySelectorAll('nav a[href^="#"]');
 const sections = ['overview', 'hotel', 'day1', 'day2', 'day3', 'day4', 'tips', 'checklist']
-  .map(id => document.getElementById(id))
-  .filter(Boolean);
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
 
 window.addEventListener('scroll', () => {
   const scrollPos = window.scrollY + 120;
@@ -119,5 +119,51 @@ renderLists();
         el.classList.toggle('hidden', el.dataset.plan !== plan);
       });
     });
+  });
+})();
+
+// 移动端导航菜单切换
+(function initMobileNav() {
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const icon = document.getElementById('nav-icon');
+  if (!toggle || !menu) return;
+
+  const closeMenu = () => {
+    menu.classList.add('hidden');
+    if (icon) {
+      icon.classList.remove('ri-close-line');
+      icon.classList.add('ri-menu-line');
+    }
+  };
+  const openMenu = () => {
+    menu.classList.remove('hidden');
+    if (icon) {
+      icon.classList.remove('ri-menu-line');
+      icon.classList.add('ri-close-line');
+    }
+  };
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (menu.classList.contains('hidden')) openMenu();
+    else closeMenu();
+  });
+
+  // 点击菜单链接后自动收起
+  menu.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => closeMenu());
+  });
+
+  // 点击外部收起
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target) && e.target !== toggle) {
+      closeMenu();
+    }
+  });
+
+  // 调整到桌面端时重置状态
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) closeMenu();
   });
 })();

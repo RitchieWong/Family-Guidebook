@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>五一北戴河-盘锦亲子自驾露营路书 · 2岁宝贝的第一次海边之旅</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
-<link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五一北戴河-盘锦亲子自驾露营路书 · 2岁宝贝的第一次海边之旅</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body class="bg-slate-50 text-slate-800">
 
 <!-- 顶部导航 -->
 <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/60">
-  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
     <div class="flex items-center gap-2">
       <span class="text-2xl">🏖️</span>
-      <span class="font-bold text-lg bg-gradient-to-r from-sky-600 to-amber-500 bg-clip-text text-transparent">五一家庭路书</span>
+      <span class="font-bold text-base md:text-lg bg-gradient-to-r from-sky-600 to-amber-500 bg-clip-text text-transparent">五一家庭路书</span>
     </div>
+    <!-- 桌面端菜单 -->
     <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
       <a href="#overview" class="hover:text-sky-600 transition">总览</a>
       <a href="#day1" class="hover:text-sky-600 transition">Day1</a>
@@ -26,6 +27,23 @@
       <a href="#hotel" class="hover:text-sky-600 transition">住宿</a>
       <a href="#tips" class="hover:text-sky-600 transition">贴士</a>
       <a href="#checklist" class="hover:text-sky-600 transition">清单</a>
+    </div>
+    <!-- 移动端汉堡按钮 -->
+    <button id="nav-toggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition text-slate-700" aria-label="菜单">
+      <i class="ri-menu-line text-2xl" id="nav-icon"></i>
+    </button>
+  </div>
+  <!-- 移动端下拉菜单 -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-slate-200/60">
+    <div class="px-4 py-2 grid grid-cols-4 gap-1 text-xs font-medium text-slate-700">
+      <a href="#overview" class="mobile-link py-3 text-center rounded-lg hover:bg-sky-50 hover:text-sky-600 transition">总览</a>
+      <a href="#day1" class="mobile-link py-3 text-center rounded-lg hover:bg-sky-50 hover:text-sky-600 transition">Day1</a>
+      <a href="#day2" class="mobile-link py-3 text-center rounded-lg hover:bg-sky-50 hover:text-sky-600 transition">Day2</a>
+      <a href="#day3" class="mobile-link py-3 text-center rounded-lg hover:bg-sky-50 hover:text-sky-600 transition">Day3</a>
+      <a href="#day4" class="mobile-link py-3 text-center rounded-lg hover:bg-sky-50 hover:text-sky-600 transition">Day4</a>
+      <a href="#hotel" class="mobile-link py-3 text-center rounded-lg hover:bg-sky-50 hover:text-sky-600 transition">住宿</a>
+      <a href="#tips" class="mobile-link py-3 text-center rounded-lg hover:bg-sky-50 hover:text-sky-600 transition">贴士</a>
+      <a href="#checklist" class="mobile-link py-3 text-center rounded-lg hover:bg-sky-50 hover:text-sky-600 transition">清单</a>
     </div>
   </div>
 </nav>
@@ -278,9 +296,11 @@
         <div class="bg-gradient-to-r from-rose-500 to-pink-500 text-white p-4 flex items-center justify-between">
           <div>
             <div class="text-xs opacity-80">房间 2 · 标间 B</div>
-            <div class="font-bold text-lg">👵 奶奶 + 宝贝</div>
+            <div class="font-bold text-lg plan-text" data-plan="a">👵 奶奶 + 宝贝</div>
+            <div class="font-bold text-lg plan-text hidden" data-plan="b">👵 奶奶 + 姑姑 + 宝贝</div>
           </div>
-          <div class="text-3xl">👶</div>
+          <div class="text-3xl plan-text" data-plan="a">👶</div>
+          <div class="text-3xl plan-text hidden" data-plan="b">👧👶</div>
         </div>
         <div class="p-5 space-y-3">
           <div class="flex items-center gap-2 text-sm text-slate-600">
@@ -301,7 +321,7 @@
             <!-- 方案 B 下文案 -->
             <div class="flex justify-between items-center py-1 plan-text hidden" data-plan="b">
               <span>5.01 团聚夜</span>
-              <span class="text-rose-600 font-medium">爷奶 + 姑姑 + 宝贝</span>
+              <span class="text-rose-600 font-medium">奶奶 + 姑姑 + 宝贝</span>
             </div>
           </div>
           <div class="text-xs text-amber-600 flex items-center gap-1 plan-text" data-plan="a">
@@ -309,8 +329,8 @@
             <span>最后一晚爷爷加入，祖孙三代挤一屋 🥰</span>
           </div>
           <div class="text-xs text-amber-600 flex items-center gap-1 plan-text hidden" data-plan="b">
-            <i class="ri-alert-line"></i>
-            <span>4 人略挤，需提前问前台加床/加被</span>
+            <i class="ri-heart-fill"></i>
+            <span>姑姑帮忙照顾宝贝，奶奶也能歇一歇 💕</span>
           </div>
         </div>
       </div>
@@ -321,10 +341,10 @@
           <div>
             <div class="text-xs opacity-80">房间 3 · 榻榻米</div>
             <div class="font-bold text-lg plan-text" data-plan="a">🏯 三姨奶 + 姑姑 + 2 哥哥</div>
-            <div class="font-bold text-lg plan-text hidden" data-plan="b">🏯 三姨奶 + 2 哥哥</div>
+            <div class="font-bold text-lg plan-text hidden" data-plan="b">🏯 爷爷 + 三姨奶 + 2 哥哥</div>
           </div>
           <div class="text-3xl plan-text" data-plan="a">👵👧👦👦</div>
-          <div class="text-3xl plan-text hidden" data-plan="b">👵👦👦</div>
+          <div class="text-3xl plan-text hidden" data-plan="b">👴👵👦👦</div>
         </div>
         <div class="p-5 space-y-3">
           <div class="flex items-center gap-2 text-sm text-slate-600">
@@ -343,7 +363,7 @@
             </div>
             <div class="flex justify-between items-center py-1 plan-text hidden" data-plan="b">
               <span>5.01 团聚夜</span>
-              <span class="text-amber-600 font-medium">三姨奶 + 2 位哥哥</span>
+              <span class="text-amber-600 font-medium">爷爷 + 三姨奶 + 2 哥哥</span>
             </div>
           </div>
           <div class="text-xs text-emerald-600 flex items-center gap-1 plan-text" data-plan="a">
@@ -352,7 +372,7 @@
           </div>
           <div class="text-xs text-sky-600 flex items-center gap-1 plan-text hidden" data-plan="b">
             <i class="ri-gamepad-line"></i>
-            <span>三姨奶陪两个哥哥，空间宽松</span>
+            <span>爷爷带着俩孙子，三姨奶作伴，其乐融融</span>
           </div>
         </div>
       </div>
@@ -380,7 +400,7 @@
           <div class="text-center text-xs bg-rose-50 text-rose-700 rounded-lg py-2">奶奶 + 宝贝</div>
           <div class="text-center text-xs bg-rose-50 text-rose-700 rounded-lg py-2">奶奶 + 宝贝</div>
           <div class="text-center text-xs bg-rose-100 text-rose-800 rounded-lg py-2 font-medium plan-text" data-plan="a">爷爷 + 奶奶 + 宝贝</div>
-          <div class="text-center text-xs bg-rose-100 text-rose-800 rounded-lg py-2 font-medium plan-text hidden" data-plan="b">爷奶 + 姑姑 + 宝贝</div>
+          <div class="text-center text-xs bg-rose-100 text-rose-800 rounded-lg py-2 font-medium plan-text hidden" data-plan="b">奶奶 + 姑姑 + 宝贝</div>
         </div>
         <!-- 榻榻米 行 -->
         <div class="grid grid-cols-4 gap-3 items-center py-2 border-t border-slate-100">
@@ -388,7 +408,7 @@
           <div class="text-center text-xs text-slate-300 rounded-lg py-2">—</div>
           <div class="text-center text-xs text-slate-300 rounded-lg py-2">—</div>
           <div class="text-center text-xs bg-amber-50 text-amber-800 rounded-lg py-2 font-medium plan-text" data-plan="a">三姨奶 + 姑姑 + 2 哥哥</div>
-          <div class="text-center text-xs bg-amber-50 text-amber-800 rounded-lg py-2 font-medium plan-text hidden" data-plan="b">三姨奶 + 2 位哥哥</div>
+          <div class="text-center text-xs bg-amber-50 text-amber-800 rounded-lg py-2 font-medium plan-text hidden" data-plan="b">爷爷 + 三姨奶 + 2 哥哥</div>
         </div>
       </div>
     </div>
@@ -469,7 +489,7 @@
             <div class="text-xs text-slate-500 mb-1 flex items-center gap-2">
               <span class="inline-block w-2 h-2 rounded-full bg-amber-500"></span>
               <span class="plan-text" data-plan="a">榻榻米房（三姨奶 + 姑姑 + 2 哥哥 · 仅团聚夜 1 晚）</span>
-              <span class="plan-text hidden" data-plan="b">榻榻米房（三姨奶 + 2 位哥哥 · 仅团聚夜 1 晚）</span>
+              <span class="plan-text hidden" data-plan="b">榻榻米房（爷爷 + 三姨奶 + 2 哥哥 · 仅团聚夜 1 晚）</span>
             </div>
             <div class="h-10 bg-slate-50 rounded-lg relative overflow-hidden">
               <div class="absolute top-1 bottom-1 left-[50%] right-[25.5%] bg-gradient-to-r from-amber-500 to-orange-500 rounded-md flex items-center justify-center text-white text-xs font-medium">
@@ -512,7 +532,7 @@
     <div class="mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-3">
       <i class="ri-lightbulb-flash-fill text-2xl text-amber-500 flex-shrink-0"></i>
       <div class="text-sm text-amber-900">
-        <b>💡 小提示：</b>前 2 晚——爸爸妈妈住标间 A，奶奶带宝贝住标间 B（奶奶带娃经验足、宝贝夜里好安抚）；5.1 爷爷、三姨奶、姑姑、2 位哥哥到齐后：爷爷加入奶奶宝贝房成为"祖孙三人间"，<b>三姨奶 + 姑姑 + 2 位哥哥</b>入住新加订的榻榻米大通铺（如姑姑想陪宝贝，则挪到标间 B，榻榻米留给三姨奶 + 两个哥哥）。预订时请跟前台沟通：<b>标间 B 加儿童围栏/小床</b>、<b>榻榻米房加 4 床被</b>、<b>3 间房尽量同层/相邻</b>，方便串门不折腾。
+        <b>💡 小提示：</b>前 2 晚——爸爸妈妈住标间 A，奶奶带宝贝住标间 B（奶奶带娃经验足、宝贝夜里好安抚）；5.1 爷爷、三姨奶、姑姑、2 位哥哥到齐后：<b>方案 A</b> — 爷爷加入奶奶宝贝房成为"祖孙三人间"，三姨奶 + 姑姑 + 2 位哥哥入住榻榻米大通铺；<b>方案 B</b>（如姑姑想陪宝贝）— 姑姑进入标间 B 陪奶奶和宝贝，爷爷则和三姨奶 + 2 位哥哥一起住榻榻米。预订时请跟前台沟通：<b>标间 B 加儿童围栏/小床</b>、<b>榻榻米房加 4 床被</b>、<b>3 间房尽量同层/相邻</b>，方便串门不折腾。
       </div>
     </div>
   </div>
