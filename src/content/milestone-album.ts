@@ -168,8 +168,12 @@ export const MILESTONE_STORIES: MilestoneStory[] = [
     age: '两岁 · 2 岁',
     season: '谷雨',
     stats: {
-      weight: '—',
-      height: '—',
+      weight: '12.5 kg',
+      height: '88.5 cm',
+      extras: [
+        { icon: 'ri-emotion-happy-line', label: '乳牙', value: '16 颗' },
+        { icon: 'ri-heart-pulse-line', label: '血红蛋白', value: '118 g/L' },
+      ],
     },
     image: '/photos/milestones-xuanxuan/cover/two-years.webp',
     imageSrc: '/photos/milestones-xuanxuan/cover-src/two-years.webp',
@@ -178,7 +182,7 @@ export const MILESTONE_STORIES: MilestoneStory[] = [
     accent: 'sky',
     title: '小小人儿的大大世界',
     letter:
-      '会数到 10、会吹蜡烛、会自己坐小马桶、第一次露营、第一次上托班。两年前那个 3.7 公斤的小不点儿，现在会拽着爸爸的手、指着门口说：「走！」世界那么大，你迫不及待想替我们再去看一遍。',
+      '会数到 10、会吹蜡烛、会自己坐小马桶、第一次露营、第一次上托班。两年前那个 3.7 公斤的小不点儿，现在 12.5 公斤、88.5 厘米，会拽着爸爸的手、指着门口说：「走！」世界那么大，你迫不及待想替我们再去看一遍。',
     linkedDates: ['2026-03-10', '2026-04-12', '2026-04-13'],
   },
 ]

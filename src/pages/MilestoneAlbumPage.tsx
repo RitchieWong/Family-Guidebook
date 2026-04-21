@@ -11,6 +11,7 @@ import {
 import { MILESTONES } from '../content/milestones'
 import { formatDate } from '../content/constants'
 import { scrollToSection } from '../utils/scrollToSection'
+import GrowthChart from '../components/GrowthChart'
 
 interface LightboxState {
   images: string[]
@@ -32,6 +33,8 @@ export default function MilestoneAlbumPage() {
           onOpenLightbox={(images, index) => setLightbox({ images, index })}
         />
       ))}
+
+      <GrowthChart />
 
       <FooterLetter />
 
