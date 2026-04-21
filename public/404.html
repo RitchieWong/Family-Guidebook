@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>暄暄的家</title>
+  <script>
+    // GitHub Pages SPA fallback:
+    // 对任意未匹配路径，返回这份 404.html（GH Pages 对 404.html 有特殊支持），
+    // 它把原始路径塞到 sessionStorage，然后跳回 index.html，index.html 里 main.tsx 一侧会
+    // 读取并替换回正确 URL，从而让 BrowserRouter 的子路径刷新 / 直接访问能正常工作。
+    (function () {
+      var l = window.location;
+      sessionStorage.setItem(
+        'redirect',
+        l.pathname + l.search + l.hash
+      );
+      // 保留查询 hash，仅把 path 还原回根，交由前端路由接管
+      l.replace(l.origin + '/');
+    })();
+  </script>
+</head>
+<body></body>
+</html>
