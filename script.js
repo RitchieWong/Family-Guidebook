@@ -12,7 +12,7 @@ const checklists = {
   ],
   'list-camp': [
     '帐篷×2（3-4人）', '天幕1个+支杆', '防潮垫/地席',
-    '露营椅×7', '折叠桌1张', '卡式炉+气罐×2',
+    '露营椅×8', '折叠桌1张', '卡式炉+气罐×2',
     '烧烤架+炭+点火器', '保温箱+冰袋', '头灯/营地灯×3',
     '垃圾袋×10'
   ],
@@ -65,7 +65,7 @@ document.getElementById('reset-btn')?.addEventListener('click', () => {
 
 // 导航高亮
 const navLinks = document.querySelectorAll('nav a[href^="#"]');
-const sections = ['overview', 'day1', 'day2', 'day3', 'day4', 'tips', 'checklist']
+const sections = ['overview', 'hotel', 'day1', 'day2', 'day3', 'day4', 'tips', 'checklist']
   .map(id => document.getElementById(id))
   .filter(Boolean);
 
@@ -95,4 +95,29 @@ renderLists();
       hero.innerHTML = `<i class="ri-sparkling-2-fill"></i><span>距离出发还有 ${days} 天 · 2岁宝贝 · 三代同堂 · 4天3晚</span>`;
     }
   }
+})();
+
+// 团聚夜姑姑住宿方案切换器（控制所有 .plan-text 元素的显示）
+(function initPlanSwitcher() {
+  const switcher = document.getElementById('plan-switcher');
+  if (!switcher) return;
+  const btns = switcher.querySelectorAll('.plan-btn');
+  const texts = document.querySelectorAll('.plan-text');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const plan = btn.dataset.plan;
+      btns.forEach(b => {
+        if (b === btn) {
+          b.classList.add('bg-white', 'shadow', 'text-emerald-700');
+          b.classList.remove('text-slate-600');
+        } else {
+          b.classList.remove('bg-white', 'shadow', 'text-emerald-700');
+          b.classList.add('text-slate-600');
+        }
+      });
+      texts.forEach(el => {
+        el.classList.toggle('hidden', el.dataset.plan !== plan);
+      });
+    });
+  });
 })();
