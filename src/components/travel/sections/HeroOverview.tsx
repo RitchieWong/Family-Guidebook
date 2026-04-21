@@ -110,8 +110,23 @@ function DayPreview({ href, badgeCls, border, tag, date, title, sub, footIcon, f
   tag: string; date: string; title: string; sub: string
   footIcon: string; foot: string; footCls: string
 }) {
+  // 站点使用 HashRouter，不能让 <a href="#dayN"> 真的修改 URL hash，
+  // 否则会被 HashRouter 当成路由跳走。这里用 JS 平滑滚动到目标元素，
+  // 并扣掉主 Nav (64) + 二级导航 (~48) + 呼吸 = 120
+  const onClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const id = href.replace(/^#/, '')
+    const el = document.getElementById(id)
+    if (!el) return
+    const top = el.getBoundingClientRect().top + window.scrollY - 120
+    window.scrollTo({ top, behavior: 'smooth' })
+  }
   return (
-    <a href={href} className={`group bg-white rounded-2xl p-5 border border-slate-100 ${border} hover:shadow-lg transition-all`}>
+    <a
+      href={href}
+      onClick={onClick}
+      className={`group bg-white rounded-2xl p-5 border border-slate-100 ${border} hover:shadow-lg transition-all`}
+    >
       <div className="flex items-center justify-between mb-2">
         <span className={`px-2 py-0.5 rounded-md text-xs font-bold ${badgeCls}`}>{tag}</span>
         <span className="text-xs text-slate-400">{date}</span>

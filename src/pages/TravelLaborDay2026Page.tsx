@@ -37,6 +37,22 @@ export default function TravelLaborDay2026Page() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  /**
+   * 注意：本站使用 HashRouter（URL 形如 /#/travel/...），
+   * 所以**不能**用 <a href="#day1">，否则会把整个 hash 替换为 #day1，
+   * 触发 HashRouter 重新路由 → 页面跳走 / 报错。
+   * 这里用 JS 滚动到目标元素，并扣掉 sticky 顶部高度。
+   */
+  const scrollToSection = (id: string) => (e: React.MouseEvent) => {
+    e.preventDefault()
+    const el = document.getElementById(id)
+    if (!el) return
+    // 主 Nav 64 + 二级导航 ~48 + 一点呼吸 = 120
+    const offset = 120
+    const top = el.getBoundingClientRect().top + window.scrollY - offset
+    window.scrollTo({ top, behavior: 'smooth' })
+  }
+
   return (
     <div className="bg-slate-50">
       {/* 内嵌 sticky 二级导航（在主 Nav 下方） */}
@@ -54,6 +70,7 @@ export default function TravelLaborDay2026Page() {
               <a
                 key={s.id}
                 href={`#${s.id}`}
+                onClick={scrollToSection(s.id)}
                 className={`whitespace-nowrap transition ${active === s.id ? 'text-sky-600' : 'hover:text-sky-600'}`}
               >
                 {s.label}
