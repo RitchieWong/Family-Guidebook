@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getOrderedCategories } from '../content/categories'
 import CategoryCard from '../components/CategoryCard'
@@ -104,8 +104,8 @@ export default function HomePage() {
         <div className="absolute top-32 -left-20 w-48 h-48 rounded-full bg-amber-200/40 blur-3xl pointer-events-none" />
         <div className="absolute inset-0 opacity-[0.04] dotted-circle pointer-events-none" />
 
-        <div className="relative px-5 pt-6 pb-8">
-          {/* Hero 文字区 */}
+        <div className="relative px-5 pt-4 pb-5">
+          {/* Hero 文字区（紧凑：头像缩小，文字行距收紧） */}
           <div className="flex items-start gap-3">
             <div className="flex-1 min-w-0">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/80 backdrop-blur text-[10px] text-slate-700 ring-1 ring-rose-200 shadow-sm">
@@ -113,9 +113,9 @@ export default function HomePage() {
                 一家人围着暄暄转
                 <span>🌸</span>
               </div>
-              <h1 className="mt-3 text-[2rem] font-black tracking-tight text-slate-900 leading-[1.05]">
+              <h1 className="mt-2 text-[1.75rem] font-black tracking-tight text-slate-900 leading-[1.05]">
                 <span className="cute-zh">欢迎来到</span>
-                <span className="block mt-1 cute-zh">
+                <span className="block mt-0.5 cute-zh">
                   <span className="title-grad underline-doodle">暄暄的家</span>
                 </span>
               </h1>
@@ -123,7 +123,7 @@ export default function HomePage() {
             {/* 插画小头像：圆形裁剪，房子+小女孩居中 */}
             <div className="shrink-0 relative">
               <div
-                className="w-24 h-24 rounded-full ring-4 ring-white shadow-lg bg-gradient-to-br from-rose-100 to-amber-100 bg-no-repeat"
+                className="w-20 h-20 rounded-full ring-4 ring-white shadow-lg bg-gradient-to-br from-rose-100 to-amber-100 bg-no-repeat"
                 style={{
                   backgroundImage: `url(${import.meta.env.BASE_URL}hero/hero-bg.png)`,
                   backgroundSize: '165% auto',
@@ -135,15 +135,14 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* 描述（完整文案） */}
-          <p className="mt-4 text-[13px] text-slate-600 leading-relaxed">
-            这里是我们一家的<span className="cute-zh text-rose-500 font-semibold">慢速时光机</span>——
-            把每一趟远行、每一个夜里敲出的小程序、每一声咿呀和每一次踮脚，
-            都轻轻收进这座小小的家。 从{' '}
+          {/* 描述（精简文案，2 行） */}
+          <p className="mt-3 text-[12.5px] text-slate-600 leading-snug line-clamp-2">
+            一家人的<span className="cute-zh text-rose-500 font-semibold">慢速时光机</span>——
+            从{' '}
             <span className="px-1.5 py-0.5 rounded bg-rose-100 text-rose-600 font-semibold whitespace-nowrap">
               {BIRTHDAY}
             </span>{' '}
-            谷雨那天的第一声啼哭起，愿这里替我们留下所有会被岁月带走的温柔 ✨
+            谷雨那天的第一声啼哭起，替我们收好所有会被岁月带走的温柔 ✨
           </p>
 
           {/* 小世界分类卡片 */}
@@ -313,56 +312,30 @@ export default function HomePage() {
 function MobileCategoryGrid({ categories }: { categories: Category[] }) {
   const [activeId, setActiveId] = useState<string | null>(null)
   const active = activeId ? categories.find((c) => c.id === activeId) : null
-  const drawerRef = useRef<HTMLDivElement>(null)
-
-  /**
-   * 展开后把 drawer 滚到视口中：
-   *   - 主 Nav sticky 高度 = 64px
-   *   - 顶部呼吸空间 = 12px
-   *   - 让 drawer 的**顶部**正好贴在 Nav 下方，这样整个 drawer（含底部 CTA）
-   *     基本都能在一屏看到；即使被 iPhone 刘海/底部 home indicator 压一点，
-   *     CTA 也因为 drawer 内部 flex 布局 + safe-area padding 而始终可点。
-   *   - 使用双 rAF 等待 accordion transition 开始后再滚（避免位置计算偏移）
-   */
-  useEffect(() => {
-    if (!active || !drawerRef.current) return
-    const el = drawerRef.current
-    const id = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const rect = el.getBoundingClientRect()
-        const NAV_H = 64
-        const BREATH = 12
-        const targetTop = window.scrollY + rect.top - NAV_H - BREATH
-        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' })
-      })
-    })
-    return () => cancelAnimationFrame(id)
-  }, [active?.id])
 
   return (
-    <div className="mt-5">
-      {/* 标题 */}
-      <div className="flex items-end justify-between mb-2.5">
-        <div>
-          <div className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-rose-500 tracking-widest">
-            <span className="w-4 h-px bg-rose-300" /> EXPLORE
-          </div>
-          <h2 className="text-lg font-black text-slate-900 cute-zh mt-0.5">
-            小世界 · <span className="title-grad">分门别类</span>
-          </h2>
-        </div>
-        {active && (
+    <div className="mt-4">
+      {/* 标题（紧凑：一行放下 h2 + 收起按钮） */}
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-base font-black text-slate-900 cute-zh leading-none">
+          小世界 · <span className="title-grad">分门别类</span>
+        </h2>
+        {active ? (
           <button
             onClick={() => setActiveId(null)}
             className="text-[11px] text-slate-400 hover:text-rose-500 inline-flex items-center gap-1"
           >
             <i className="ri-close-line" /> 收起
           </button>
+        ) : (
+          <span className="text-[10px] text-slate-400 inline-flex items-center gap-1">
+            <i className="ri-finger-tap-line" /> 轻触展开
+          </span>
         )}
       </div>
 
       {/* 九宫格瓦片 · 2 列大卡，每卡一个分类 */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2.5">
         {categories.map((c) => {
           const isActive = c.id === active?.id
           const decor = CATEGORY_DECOR[c.id]
@@ -376,14 +349,14 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
               }`}
             >
               {/* 主体：柔色粉彩渐变（搭配白底插画） */}
-              <div className={`relative bg-gradient-to-br ${decor.softGrad} p-4 min-h-[124px]`}>
+              <div className={`relative bg-gradient-to-br ${decor.softGrad} p-3 min-h-[102px]`}>
                 {/* 右下大背景 emoji（淡化装饰） */}
-                <div className="absolute -right-3 -bottom-4 text-[92px] leading-none opacity-25 select-none pointer-events-none rotate-[-8deg] group-hover:rotate-0 group-hover:scale-110 transition duration-500">
+                <div className="absolute -right-2 -bottom-3 text-[76px] leading-none opacity-25 select-none pointer-events-none rotate-[-8deg] group-hover:rotate-0 group-hover:scale-110 transition duration-500">
                   {decor.bg}
                 </div>
 
                 {/* 左上白色柔光斑 */}
-                <div className="absolute -left-4 -top-4 w-20 h-20 rounded-full bg-white/70 blur-2xl pointer-events-none" />
+                <div className="absolute -left-4 -top-4 w-16 h-16 rounded-full bg-white/70 blur-2xl pointer-events-none" />
 
                 {/* AI 插画（主视觉，mix-blend-multiply 让白底完美融入彩色卡面） + 数量徽章 */}
                 <div className="relative flex items-start justify-between">
@@ -395,30 +368,30 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
                     <img
                       src={`${import.meta.env.BASE_URL}${decor.image}`}
                       alt=""
-                      className="w-[64px] h-[64px] object-contain drop-shadow-[0_2px_6px_rgba(244,114,182,0.25)] [mix-blend-mode:multiply]"
+                      className="w-[52px] h-[52px] object-contain drop-shadow-[0_2px_6px_rgba(244,114,182,0.25)] [mix-blend-mode:multiply]"
                       loading="lazy"
                     />
                     {/* 角落小装饰 emoji */}
-                    <span className="absolute -top-1 -right-1 text-base drop-shadow-sm">
+                    <span className="absolute -top-1 -right-1 text-sm drop-shadow-sm">
                       {decor.corner}
                     </span>
                   </div>
                   <span
-                    className={`inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full ring-1 backdrop-blur text-[10px] font-bold shadow-sm ${decor.badgeBg} ${decor.badgeText}`}
+                    className={`inline-flex items-center justify-center min-w-[20px] h-[20px] px-1.5 rounded-full ring-1 backdrop-blur text-[10px] font-bold shadow-sm ${decor.badgeBg} ${decor.badgeText}`}
                   >
                     {c.items.length}
                   </span>
                 </div>
 
                 {/* 标题 */}
-                <div className="relative mt-2">
+                <div className="relative mt-1.5">
                   <div
-                    className={`font-bold text-[15px] leading-tight cute-zh tracking-wide ${decor.titleColor}`}
+                    className={`font-bold text-[14px] leading-tight cute-zh tracking-wide ${decor.titleColor}`}
                   >
                     {c.title}
                   </div>
                   <div
-                    className={`text-[10px] uppercase tracking-wider mt-0.5 truncate ${decor.subColor}`}
+                    className={`text-[9px] uppercase tracking-wider mt-0.5 truncate ${decor.subColor}`}
                   >
                     {c.subtitle}
                   </div>
@@ -426,7 +399,7 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
 
                 {/* 激活时右下箭头变成向下 */}
                 <i
-                  className={`absolute bottom-2.5 right-3 z-10 text-sm transition ${decor.titleColor} opacity-70 ${
+                  className={`absolute bottom-2 right-2.5 z-10 text-sm transition ${decor.titleColor} opacity-70 ${
                     isActive ? 'ri-arrow-up-s-line' : 'ri-arrow-right-s-line'
                   }`}
                 />
@@ -444,66 +417,38 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
         })}
       </div>
 
-      {/* 展开的子项抽屉（紧贴九宫格下方 · 一屏可见）
-          - 使用 dvh 动态视口高度（iOS 下会排除地址栏 + 刘海/底部 home indicator）
-          - max-height 控制为：视口 - 主 Nav(64) - drawer 顶部距离(~180，根据 Hero 文案估算)
-          - CategoryDrawer 内部自带 flex 布局，超出的子项在内部滚动，CTA 固定底部 */}
+      {/* 展开的子项抽屉（原地展开 · 紧凑布局，一屏内可见） */}
       <div
-        ref={drawerRef}
         className={`overflow-hidden transition-all duration-300 ease-out ${
-          active
-            ? 'max-h-[min(640px,calc(100dvh-80px))] opacity-100 mt-3'
-            : 'max-h-0 opacity-0 mt-0'
+          active ? 'max-h-[520px] opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'
         }`}
-        style={{ scrollMarginTop: '76px' }}
       >
         {active && <CategoryDrawer category={active} />}
       </div>
-
-      {/* 未激活时的提示 */}
-      {!active && (
-        <div className="mt-3 text-center text-[11px] text-slate-400">
-          <i className="ri-finger-tap-line mr-1" />
-          轻触上方任一方块 · 查看里面的小世界
-        </div>
-      )}
     </div>
   )
 }
 
-/** 展开抽屉：分类的子项列表（浅色调，与九宫格卡呼应） */
+/** 展开抽屉：分类的子项列表（浅色调，与九宫格卡呼应 · 紧凑版） */
 function CategoryDrawer({ category }: { category: Category }) {
   const accent = ACCENT[category.accent]
   const decor = CATEGORY_DECOR[category.id]
-  const drawerGrad = decor?.drawerGrad || 'from-slate-100 via-slate-50 to-slate-100'
-  const titleColor = decor?.titleColor || 'text-slate-700'
 
   return (
     <div
-      className={`flex flex-col rounded-2xl overflow-hidden bg-white ring-1 ${decor?.ringColor || 'ring-slate-200'} shadow-md animate-[fadeUp_0.3s_ease-out]`}
-      style={{ maxHeight: 'min(640px, calc(100dvh - 80px))' }}
+      className={`rounded-2xl overflow-hidden bg-white ring-1 ${decor?.ringColor || 'ring-slate-200'} shadow-md animate-[fadeUp_0.3s_ease-out]`}
     >
-      {/* 描述条（浅色粉彩 + 深色文字） */}
-      <div className={`relative shrink-0 px-4 py-3 bg-gradient-to-br ${drawerGrad}`}>
-        {/* 顶部白色高光 */}
-        <div className="absolute inset-x-0 top-0 h-px bg-white/70 pointer-events-none" />
-        <p className={`relative text-[12px] leading-relaxed line-clamp-2 ${titleColor}`}>
-          {category.desc}
-        </p>
-      </div>
-
-      {/* 子项列表（超出内部滚动，保证底部 CTA 始终可见） */}
-      <ul className="flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 no-scrollbar">
+      {/* 子项列表（紧凑行距） */}
+      <ul className="divide-y divide-slate-100">
         {category.items.map((item) => (
           <MobileSubItem key={item.id} item={item} />
         ))}
       </ul>
 
-      {/* Footer CTA（固定底部 + 安全区 padding，避开 iPhone home indicator） */}
+      {/* Footer CTA（紧凑：py-2 + 小字号） */}
       <Link
         to={`/category/${category.id}`}
-        className={`shrink-0 px-4 py-2.5 border-t border-slate-100 text-xs ${accent.solid} flex items-center justify-between bg-slate-50/60`}
-        style={{ paddingBottom: 'max(0.625rem, env(safe-area-inset-bottom))' }}
+        className={`px-4 py-2 border-t border-slate-100 text-[12px] ${accent.solid} flex items-center justify-between bg-slate-50/60`}
       >
         <span>查看 {category.title} 全部 {category.items.length} 项</span>
         <i className="ri-arrow-right-line" />
@@ -516,12 +461,12 @@ function MobileSubItem({ item }: { item: CategoryItem }) {
   const status = STATUS[item.status]
 
   const inner = (
-    <div className="px-4 py-2.5 flex items-center gap-3">
-      <div className="text-lg shrink-0">{item.cover || '✨'}</div>
+    <div className="px-3.5 py-2 flex items-center gap-2.5">
+      <div className="text-base shrink-0">{item.cover || '✨'}</div>
       <div className="min-w-0 flex-1">
-        <div className="text-[13px] font-medium text-slate-800 truncate">{item.title}</div>
+        <div className="text-[13px] font-medium text-slate-800 truncate leading-tight">{item.title}</div>
         {item.subtitle && (
-          <div className="text-[10px] text-slate-500 truncate">{item.subtitle}</div>
+          <div className="text-[10px] text-slate-500 truncate mt-0.5">{item.subtitle}</div>
         )}
       </div>
       <span
