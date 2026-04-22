@@ -104,7 +104,7 @@ export default function HomePage() {
         <div className="absolute top-32 -left-20 w-48 h-48 rounded-full bg-amber-200/40 blur-3xl pointer-events-none" />
         <div className="absolute inset-0 opacity-[0.04] dotted-circle pointer-events-none" />
 
-        <div className="relative px-5 pt-4 pb-5">
+        <div className="relative px-5 pt-3 pb-3">
           {/* Hero 文字区（紧凑：头像缩小，文字行距收紧） */}
           <div className="flex items-start gap-3">
             <div className="flex-1 min-w-0">
@@ -113,7 +113,7 @@ export default function HomePage() {
                 一家人围着暄暄转
                 <span>🌸</span>
               </div>
-              <h1 className="mt-2 text-[1.75rem] font-black tracking-tight text-slate-900 leading-[1.05]">
+              <h1 className="mt-1.5 text-[1.75rem] font-black tracking-tight text-slate-900 leading-[1.05]">
                 <span className="cute-zh">欢迎来到</span>
                 <span className="block mt-0.5 cute-zh">
                   <span className="title-grad underline-doodle">暄暄的家</span>
@@ -135,14 +135,15 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* 描述（精简文案，2 行） */}
-          <p className="mt-3 text-[12.5px] text-slate-600 leading-snug line-clamp-2">
-            一家人的<span className="cute-zh text-rose-500 font-semibold">慢速时光机</span>——
-            从{' '}
+          {/* 描述（完整文案 · 行距收紧但不裁剪） */}
+          <p className="mt-2.5 text-[12.5px] text-slate-600 leading-[1.55]">
+            这里是我们一家的<span className="cute-zh text-rose-500 font-semibold">慢速时光机</span>——
+            把每一趟远行、每一个夜里敲出的小程序、每一声咿呀和每一次踮脚，
+            都轻轻收进这座小小的家。 从{' '}
             <span className="px-1.5 py-0.5 rounded bg-rose-100 text-rose-600 font-semibold whitespace-nowrap">
               {BIRTHDAY}
             </span>{' '}
-            谷雨那天的第一声啼哭起，替我们收好所有会被岁月带走的温柔 ✨
+            谷雨那天的第一声啼哭起，愿这里替我们留下所有会被岁月带走的温柔 ✨
           </p>
 
           {/* 小世界分类卡片 */}
@@ -314,12 +315,17 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
   const active = activeId ? categories.find((c) => c.id === activeId) : null
 
   return (
-    <div className="mt-4">
-      {/* 标题（紧凑：一行放下 h2 + 收起按钮） */}
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-base font-black text-slate-900 cute-zh leading-none">
-          小世界 · <span className="title-grad">分门别类</span>
-        </h2>
+    <div className="mt-3">
+      {/* 标题（保留 EXPLORE 小标 + h2 两行结构） */}
+      <div className="flex items-end justify-between mb-2">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-rose-500 tracking-widest leading-none">
+            <span className="w-4 h-px bg-rose-300" /> EXPLORE
+          </div>
+          <h2 className="text-base font-black text-slate-900 cute-zh mt-1 leading-none">
+            小世界 · <span className="title-grad">分门别类</span>
+          </h2>
+        </div>
         {active ? (
           <button
             onClick={() => setActiveId(null)}
@@ -349,7 +355,7 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
               }`}
             >
               {/* 主体：柔色粉彩渐变（搭配白底插画） */}
-              <div className={`relative bg-gradient-to-br ${decor.softGrad} p-3 min-h-[102px]`}>
+              <div className={`relative bg-gradient-to-br ${decor.softGrad} p-2.5 min-h-[94px]`}>
                 {/* 右下大背景 emoji（淡化装饰） */}
                 <div className="absolute -right-2 -bottom-3 text-[76px] leading-none opacity-25 select-none pointer-events-none rotate-[-8deg] group-hover:rotate-0 group-hover:scale-110 transition duration-500">
                   {decor.bg}
@@ -368,7 +374,7 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
                     <img
                       src={`${import.meta.env.BASE_URL}${decor.image}`}
                       alt=""
-                      className="w-[52px] h-[52px] object-contain drop-shadow-[0_2px_6px_rgba(244,114,182,0.25)] [mix-blend-mode:multiply]"
+                      className="w-[46px] h-[46px] object-contain drop-shadow-[0_2px_6px_rgba(244,114,182,0.25)] [mix-blend-mode:multiply]"
                       loading="lazy"
                     />
                     {/* 角落小装饰 emoji */}
@@ -420,7 +426,7 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
       {/* 展开的子项抽屉（原地展开 · 紧凑布局，一屏内可见） */}
       <div
         className={`overflow-hidden transition-all duration-300 ease-out ${
-          active ? 'max-h-[520px] opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'
+          active ? 'max-h-[520px] opacity-100 mt-1.5' : 'max-h-0 opacity-0 mt-0'
         }`}
       >
         {active && <CategoryDrawer category={active} />}
@@ -445,10 +451,10 @@ function CategoryDrawer({ category }: { category: Category }) {
         ))}
       </ul>
 
-      {/* Footer CTA（紧凑：py-2 + 小字号） */}
+      {/* Footer CTA（紧凑：py-1.5 + 小字号） */}
       <Link
         to={`/category/${category.id}`}
-        className={`px-4 py-2 border-t border-slate-100 text-[12px] ${accent.solid} flex items-center justify-between bg-slate-50/60`}
+        className={`px-4 py-1.5 border-t border-slate-100 text-[12px] ${accent.solid} flex items-center justify-between bg-slate-50/60`}
       >
         <span>查看 {category.title} 全部 {category.items.length} 项</span>
         <i className="ri-arrow-right-line" />
@@ -461,7 +467,7 @@ function MobileSubItem({ item }: { item: CategoryItem }) {
   const status = STATUS[item.status]
 
   const inner = (
-    <div className="px-3.5 py-2 flex items-center gap-2.5">
+    <div className="px-3.5 py-1.5 flex items-center gap-2.5">
       <div className="text-base shrink-0">{item.cover || '✨'}</div>
       <div className="min-w-0 flex-1">
         <div className="text-[13px] font-medium text-slate-800 truncate leading-tight">{item.title}</div>
