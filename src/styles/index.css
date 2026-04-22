@@ -33,7 +33,7 @@ body {
   font-feature-settings: 'palt';
 }
 
-/* 细腻滚动条 */
+/* 细腻滚动条（仅桌面端显示；移动端隐藏） */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -56,6 +56,49 @@ body {
 html {
   scrollbar-color: #fbcfe8 #fff7f2;
   scrollbar-width: thin;
+}
+
+/* 移动端（窄屏）：彻底隐藏页面滚动条 —— 移动端本身不需要看到滚动条 */
+@media (max-width: 767px) {
+  /* WebKit (iOS Safari, Chrome Mobile) */
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  ::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none;
+  }
+  /* Firefox */
+  html,
+  body {
+    scrollbar-width: none;
+  }
+  /* IE / Edge legacy */
+  html,
+  body {
+    -ms-overflow-style: none;
+  }
+}
+
+/* 首页九宫格展开抽屉 · 淡入上滑 */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 隐藏滚动条（sticky 水平导航用） */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* ====== 首页装饰 ====== */

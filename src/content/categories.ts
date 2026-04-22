@@ -17,7 +17,7 @@ export const CATEGORIES: Record<string, Category> = {
     subtitle: 'Growth Diary',
     desc: '身高、体重、第一颗牙、第一句话……把每个小小里程碑都好好记下来。',
     icon: 'ri-book-2-line',
-    emoji: '📖',
+    emoji: '🌱',
     accent: 'amber',
     items: [
       {
@@ -41,6 +41,17 @@ export const CATEGORIES: Record<string, Category> = {
         tags: ['数据', 'WHO 参考'],
         status: 'live',
         to: '/growth/curve'
+      },
+      {
+        id: 'gifts',
+        title: '暄暄的礼物',
+        subtitle: "Gifts for Xuanxuan",
+        desc: '爷爷奶奶、姥姥姥爷、叔叔阿姨们送的每一份礼物，都是惦记着你的一颗心。',
+        cover: '🎁',
+        date: '2024-04-19',
+        tags: ['亲友', '心意', '百天', '周岁'],
+        status: 'live',
+        to: '/growth/gifts'
       }
     ]
   },
@@ -52,7 +63,7 @@ export const CATEGORIES: Record<string, Category> = {
     subtitle: 'Travel Guidebooks',
     desc: '每一次家庭出行的完整路书：路线、住宿、贴士清单，都被好好收藏在这里。',
     icon: 'ri-road-map-fill',
-    emoji: '🏖️',
+    emoji: '🎠',
     accent: 'sky',
     items: [
       {
@@ -103,7 +114,7 @@ export const CATEGORIES: Record<string, Category> = {
     subtitle: 'Family Album',
     desc: '按时间 / 相册筛选的家庭照片集，照片本地处理后直接进仓库，全站零成本托管。',
     icon: 'ri-gallery-line',
-    emoji: '🖼️',
+    emoji: '📷',
     accent: 'cyan',
     items: [
       {
@@ -116,6 +127,17 @@ export const CATEGORIES: Record<string, Category> = {
         tags: ['里程碑', '五张图', '家书'],
         status: 'live',
         to: '/album/milestones-xuanxuan'
+      },
+      {
+        id: 'daily-moments',
+        title: '暄暄生活点滴',
+        subtitle: 'Daily Little Moments',
+        desc: '那些没被正式拍的、但足够温柔的日常：散步、吃饭、睡前、洗澡……每个节点 3 张生活照。',
+        cover: '🍓',
+        date: '2024-05-01',
+        tags: ['生活', '时间线', '日常'],
+        status: 'live',
+        to: '/album/daily-moments'
       },
       {
         id: 'all-albums',
@@ -138,7 +160,7 @@ export const CATEGORIES: Record<string, Category> = {
     subtitle: 'Mini Programs',
     desc: '爸爸亲手写的小程序合集：给爱人和孩子用的菜谱、给孩子用的启蒙游戏，藏着满满心意。',
     icon: 'ri-smartphone-line',
-    emoji: '📱',
+    emoji: '🧸',
     accent: 'violet',
     items: [
       {
@@ -172,54 +194,11 @@ export const CATEGORIES: Record<string, Category> = {
         status: 'plan'
       }
     ]
-  },
-
-  // ================ 🎮 家庭游戏厅 ================
-  games: {
-    id: 'games',
-    title: '家庭游戏厅',
-    subtitle: 'Family Arcade',
-    desc: '爸爸手写的小游戏合集：记忆翻翻乐、贪吃小恐龙、亲子问答……周末全家上场。',
-    icon: 'ri-gamepad-line',
-    emoji: '🎮',
-    accent: 'rose',
-    items: [
-      {
-        id: 'memory-flip',
-        title: '记忆翻翻乐',
-        subtitle: 'Memory Flip',
-        desc: '经典配对小游戏，翻开卡片找出一样的图案，全家比拼记忆力。',
-        cover: '🃏',
-        date: '2026-05-10',
-        tags: ['记忆', '亲子'],
-        status: 'dev'
-      },
-      {
-        id: 'dino-run',
-        title: '贪吃小恐龙',
-        subtitle: 'Dino Run',
-        desc: '小朋友点头 / 长辈点按钮，一起跳过障碍物，看看谁能跑最远。',
-        cover: '🦖',
-        date: '2026-06-20',
-        tags: ['反应', '轻操作'],
-        status: 'plan'
-      },
-      {
-        id: 'family-quiz',
-        title: '我们家问答赛',
-        subtitle: 'Family Quiz',
-        desc: '关于家人的趣味问答：奶奶的拿手菜是什么？爸爸最怕的动物？',
-        cover: '❓',
-        date: '2026-08-01',
-        tags: ['派对', '三代同堂'],
-        status: 'plan'
-      }
-    ]
   }
 }
 
-/** 首页展示顺序：成长日记 → 旅行路书 → 家庭相册 → 小程序 → 游戏厅 */
-export const CATEGORY_ORDER = ['growth', 'travel', 'album', 'mini-programs', 'games']
+/** 首页展示顺序：成长日记 → 旅行路书 → 家庭相册 → 小程序 */
+export const CATEGORY_ORDER = ['growth', 'travel', 'album', 'mini-programs']
 
 export function getOrderedCategories(): Category[] {
   const ordered = CATEGORY_ORDER.map(id => CATEGORIES[id]).filter(Boolean)

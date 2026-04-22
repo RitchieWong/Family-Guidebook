@@ -11,7 +11,8 @@ import {
 import { MILESTONES } from '../content/milestones'
 import { formatDate } from '../content/constants'
 import { scrollToSection } from '../utils/scrollToSection'
-import GrowthChart from '../components/GrowthChart'
+import MobileAnchorFab from '../components/MobileAnchorFab'
+import StickyPageNav from '../components/StickyPageNav'
 
 interface LightboxState {
   images: string[]
@@ -23,6 +24,21 @@ export default function MilestoneAlbumPage() {
 
   return (
     <div className="bg-[#fff7f2]">
+      {/* 顶部 sticky 二级导航 */}
+      <StickyPageNav
+        back={{ to: '/category/album', label: '家庭相册' }}
+        accent="rose"
+        sections={[
+          { id: 'hero', label: '顶部', emoji: '🌷' },
+          ...MILESTONE_STORIES.map((s) => ({
+            id: s.id,
+            label: s.stage,
+            emoji: s.fallbackEmoji,
+          })),
+          { id: 'footer-letter', label: '家书', emoji: '💌' },
+        ]}
+      />
+
       <Hero />
 
       {MILESTONE_STORIES.map((s, idx) => (
@@ -34,9 +50,20 @@ export default function MilestoneAlbumPage() {
         />
       ))}
 
-      <GrowthChart />
-
       <FooterLetter />
+
+      <MobileAnchorFab
+        title="成长里程碑"
+        anchors={[
+          { id: 'hero', label: '顶部介绍', icon: 'ri-star-line', group: '页面板块' },
+          ...MILESTONE_STORIES.map((s) => ({
+            id: s.id,
+            label: `${s.order}. ${s.stage} · ${s.title}`,
+            icon: 'ri-image-2-line',
+            group: '5 个节点',
+          })),
+        ]}
+      />
 
       {lightbox && (
         <Lightbox
@@ -54,7 +81,7 @@ export default function MilestoneAlbumPage() {
 // ========================================================================
 function Hero() {
   return (
-    <header className="relative overflow-hidden">
+    <header id="hero" className="relative overflow-hidden scroll-mt-32">
       <div className="absolute inset-0 bg-gradient-to-br from-rose-50 via-amber-50 to-pink-50" />
       <div className="absolute -top-10 -left-10 w-72 h-72 rounded-full bg-rose-200/40 blur-3xl" />
       <div className="absolute bottom-10 -right-10 w-80 h-80 rounded-full bg-amber-200/40 blur-3xl" />
@@ -62,8 +89,8 @@ function Hero() {
         🌷
       </div>
 
-      <div className="relative max-w-5xl mx-auto px-5 lg:px-8 pt-10 pb-14">
-        <nav className="flex items-center gap-2 text-sm text-slate-500 mb-5 flex-wrap">
+      <div className="relative max-w-5xl mx-auto px-5 lg:px-8 pt-6 md:pt-10 pb-8 md:pb-14">
+        <nav className="flex items-center gap-2 text-xs md:text-sm text-slate-500 mb-3 md:mb-5 flex-wrap">
           <Link to="/" className="hover:text-rose-600 inline-flex items-center gap-1">
             <i className="ri-home-4-line" /> 首页
           </Link>
@@ -75,22 +102,22 @@ function Hero() {
           <span className="text-slate-700 font-medium">{MILESTONE_ALBUM_META.title}</span>
         </nav>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/70 backdrop-blur ring-1 ring-rose-200 text-rose-700 text-xs font-semibold mb-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/70 backdrop-blur ring-1 ring-rose-200 text-rose-700 text-[11px] md:text-xs font-semibold mb-3 md:mb-4">
           <i className="ri-heart-3-fill" />
           <span>5 个节点 · 5 封家书 · 一路走来的那些瞬间</span>
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-black leading-tight">
+        <h1 className="text-3xl md:text-6xl font-black leading-tight">
           <span className="handwrite text-slate-800">{MILESTONE_ALBUM_META.title}</span>
         </h1>
-        <div className="mt-2 text-sm md:text-base tracking-[0.3em] text-rose-500 font-semibold uppercase">
+        <div className="mt-1 md:mt-2 text-xs md:text-base tracking-[0.3em] text-rose-500 font-semibold uppercase">
           {MILESTONE_ALBUM_META.subtitle}
         </div>
-        <p className="mt-5 max-w-2xl text-slate-600 leading-relaxed">
+        <p className="mt-3 md:mt-5 max-w-2xl text-xs md:text-base text-slate-600 leading-relaxed">
           {MILESTONE_ALBUM_META.description}
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-2">
+        <div className="mt-5 md:mt-8 flex flex-wrap gap-2">
           {MILESTONE_STORIES.map((s) => (
             <a
               key={s.id}
@@ -148,11 +175,11 @@ function StorySection({
   return (
     <section
       id={story.id}
-      className={`relative py-16 md:py-20 scroll-mt-24 bg-gradient-to-br ${STORY_BG[story.accent]}`}
+      className={`relative py-10 md:py-20 scroll-mt-32 bg-gradient-to-br ${STORY_BG[story.accent]}`}
     >
       <div className="max-w-5xl mx-auto px-5 lg:px-8">
         <div
-          className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center ${
+          className={`grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center ${
             imageOnLeft ? '' : 'md:[&>:first-child]:order-2'
           }`}
         >
@@ -462,7 +489,7 @@ function Lightbox({
 // ========================================================================
 function FooterLetter() {
   return (
-    <section className="relative py-16 md:py-20 overflow-hidden">
+    <section id="footer-letter" className="relative py-16 md:py-20 overflow-hidden scroll-mt-32">
       <div className="max-w-4xl mx-auto px-5 lg:px-8">
         <div className="relative rounded-[32px] p-8 md:p-14 bg-gradient-to-br from-rose-400 via-pink-400 to-amber-400 text-white text-center shadow-xl overflow-hidden">
           <div className="absolute -top-8 -left-6 text-8xl opacity-15 select-none">🌷</div>

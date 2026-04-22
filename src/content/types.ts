@@ -25,6 +25,8 @@ export interface Category {
   desc: string
   icon: string
   emoji: string
+  /** 可选：AI 生成的高质量分类图标（PNG），优先于 emoji 展示 */
+  iconImage?: string
   accent: AccentKey
   items: CategoryItem[]
 }

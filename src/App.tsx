@@ -7,6 +7,8 @@ import CategoryPage from './pages/CategoryPage'
 import MilestonesPage from './pages/MilestonesPage'
 import MilestoneAlbumPage from './pages/MilestoneAlbumPage'
 import GrowthCurvePage from './pages/GrowthCurvePage'
+import GiftsPage from './pages/GiftsPage'
+import DailyMomentsPage from './pages/DailyMomentsPage'
 import TravelLaborDay2026Page from './pages/TravelLaborDay2026Page'
 import TravelNationalDay2025Page from './pages/TravelNationalDay2025Page'
 import AlbumListPage from './pages/AlbumListPage'
@@ -33,6 +35,8 @@ export default function App() {
           <Route path="/category/:id" element={<CategoryPage />} />
           <Route path="/growth/milestones" element={<MilestonesPage />} />
           <Route path="/growth/curve" element={<GrowthCurvePage />} />
+          <Route path="/growth/gifts" element={<GiftsPage />} />
+          <Route path="/album/daily-moments" element={<DailyMomentsPage />} />
           <Route path="/travel/2026-labor-day" element={<TravelLaborDay2026Page />} />
           <Route path="/travel/2025-national-day" element={<TravelNationalDay2025Page />} />
           <Route path="/album" element={<AlbumListPage />} />

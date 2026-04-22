@@ -21,15 +21,25 @@ export default function CategoryCard({ category }: Props) {
       {/* Header */}
       <Link
         to={`/category/${category.id}`}
-        className={`block bg-gradient-to-br ${accent.grad} p-6 text-white`}
+        className={`block bg-gradient-to-br ${accent.grad} p-6 text-white relative overflow-hidden`}
       >
-        <div className="flex items-start justify-between">
+        {/* AI icon 作为右侧装饰 */}
+        {category.iconImage && (
+          <img
+            src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${category.iconImage}`}
+            alt=""
+            aria-hidden
+            className="pointer-events-none select-none absolute -right-4 -top-4 w-36 h-36 object-contain opacity-95 drop-shadow-xl rotate-[-6deg] group-hover:rotate-0 group-hover:scale-105 transition-transform duration-500"
+          />
+        )}
+
+        <div className="flex items-start justify-between relative">
           <div>
             <div className="text-4xl mb-2">{category.emoji}</div>
             <h3 className="text-xl font-semibold">{category.title}</h3>
             <p className="text-white/80 text-sm mt-0.5">{category.subtitle}</p>
           </div>
-          <i className={`${category.icon} text-3xl text-white/60`} />
+          {!category.iconImage && <i className={`${category.icon} text-3xl text-white/60`} />}
         </div>
       </Link>
 

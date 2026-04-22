@@ -36,7 +36,7 @@ export default function GrowthChart() {
       </header>
 
       {/* 当前差值卡 */}
-      <div className="grid grid-cols-2 gap-3 md:gap-4 mb-8">
+      <div id="curve-diff" className="grid grid-cols-2 gap-3 md:gap-4 mb-8 scroll-mt-32">
         <DiffCard
           icon="ri-ruler-line"
           label="身高"
@@ -58,7 +58,7 @@ export default function GrowthChart() {
       </div>
 
       {/* 两张曲线 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div id="curve-charts" className="grid grid-cols-1 lg:grid-cols-2 gap-6 scroll-mt-32">
         <ChartCard
           title="身高 / 身长（cm）"
           accent="rose"
@@ -92,7 +92,7 @@ export default function GrowthChart() {
       </div>
 
       {/* 实测点列表 */}
-      <div className="mt-8 rounded-2xl bg-white ring-1 ring-slate-200 px-5 py-4">
+      <div id="curve-records" className="mt-8 rounded-2xl bg-white ring-1 ring-slate-200 px-5 py-4 scroll-mt-32">
         <div className="flex items-center gap-2 mb-3">
           <i className="ri-pin-distance-line text-slate-400" />
           <span className="text-xs tracking-[0.25em] font-semibold text-slate-500 uppercase">
