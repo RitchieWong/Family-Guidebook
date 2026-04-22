@@ -270,7 +270,14 @@ function StickyFilterBar({
     const el = itemRefs.current[filter]
     const scroller = scrollerRef.current
     if (!el || !scroller) return
-    const target = el.offsetLeft + el.offsetWidth / 2 - scroller.clientWidth / 2
+    // 如果激活项在可视区左半边（比如第一个 tab），把 scroller 归零，
+    // 避免被强制居中后视觉上"第一个 tab 漂到中间、第二个看起来更居中"的错觉。
+    const elCenter = el.offsetLeft + el.offsetWidth / 2
+    if (elCenter <= scroller.clientWidth / 2) {
+      scroller.scrollTo({ left: 0, behavior: 'smooth' })
+      return
+    }
+    const target = elCenter - scroller.clientWidth / 2
     const clamped = Math.max(
       0,
       Math.min(target, scroller.scrollWidth - scroller.clientWidth),
