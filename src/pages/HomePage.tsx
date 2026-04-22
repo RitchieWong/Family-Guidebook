@@ -311,8 +311,9 @@ export default function HomePage() {
  *   - 再次点击同一瓦片 → 收起；切换分类 → 平滑切换
  * ============================================================ */
 function MobileCategoryGrid({ categories }: { categories: Category[] }) {
-  const [activeId, setActiveId] = useState<string | null>(null)
-  const active = activeId ? categories.find((c) => c.id === activeId) : null
+  // 默认选中第一个分类（成长日记），不支持收起：点当前卡片无效，点其他卡片切换。
+  const [activeId, setActiveId] = useState<string>(categories[0]?.id ?? '')
+  const active = categories.find((c) => c.id === activeId) ?? categories[0]
 
   return (
     <div className="mt-3">
@@ -326,18 +327,9 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
             小世界 · <span className="title-grad">分门别类</span>
           </h2>
         </div>
-        {active ? (
-          <button
-            onClick={() => setActiveId(null)}
-            className="text-[11px] text-slate-400 hover:text-rose-500 inline-flex items-center gap-1"
-          >
-            <i className="ri-close-line" /> 收起
-          </button>
-        ) : (
-          <span className="text-[10px] text-slate-400 inline-flex items-center gap-1">
-            <i className="ri-finger-tap-line" /> 轻触展开
-          </span>
-        )}
+        <span className="text-[10px] text-slate-400 inline-flex items-center gap-1">
+          <i className="ri-finger-tap-line" /> 轻触切换
+        </span>
       </div>
 
       {/* 九宫格瓦片 · 2 列大卡，每卡一个分类 */}
@@ -349,7 +341,10 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
           return (
             <button
               key={c.id}
-              onClick={() => setActiveId((cur) => (cur === c.id ? null : c.id))}
+              // 只在切换到其他卡片时更新，点击当前卡片无操作（不收起）
+              onClick={() => {
+                if (c.id !== activeId) setActiveId(c.id)
+              }}
               className={`group relative rounded-2xl overflow-hidden transition-all duration-300 active:scale-[0.97] text-left ring-1 ${decor.ringColor} ${decor.shadowStyle} ${
                 isActive ? 'scale-[0.98]' : 'hover:-translate-y-0.5'
               }`}
@@ -403,12 +398,12 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
                   </div>
                 </div>
 
-                {/* 激活时右下箭头变成向下 */}
-                <i
-                  className={`absolute bottom-2 right-2.5 z-10 text-sm transition ${decor.titleColor} opacity-70 ${
-                    isActive ? 'ri-arrow-up-s-line' : 'ri-arrow-right-s-line'
-                  }`}
-                />
+                {/* 激活时右下箭头指向下方 drawer（当前选中） */}
+                {isActive && (
+                  <i
+                    className={`absolute bottom-2 right-2.5 z-10 text-sm ${decor.titleColor} opacity-80 ri-arrow-down-s-line`}
+                  />
+                )}
               </div>
 
               {/* 激活指示三角（指向下方 drawer） */}
@@ -423,14 +418,12 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
         })}
       </div>
 
-      {/* 展开的子项抽屉（原地展开 · 紧凑布局，一屏内可见） */}
-      <div
-        className={`overflow-hidden transition-all duration-300 ease-out ${
-          active ? 'max-h-[520px] opacity-100 mt-1.5' : 'max-h-0 opacity-0 mt-0'
-        }`}
-      >
-        {active && <CategoryDrawer category={active} />}
-      </div>
+      {/* 子项抽屉（始终展开当前选中分类；切换时通过 key 触发 fadeUp 过渡） */}
+      {active && (
+        <div className="mt-1.5">
+          <CategoryDrawer key={active.id} category={active} />
+        </div>
+      )}
     </div>
   )
 }
