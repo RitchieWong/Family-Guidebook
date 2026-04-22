@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getOrderedCategories } from '../content/categories'
 import CategoryCard from '../components/CategoryCard'
@@ -313,6 +313,31 @@ export default function HomePage() {
 function MobileCategoryGrid({ categories }: { categories: Category[] }) {
   const [activeId, setActiveId] = useState<string | null>(null)
   const active = activeId ? categories.find((c) => c.id === activeId) : null
+  const drawerRef = useRef<HTMLDivElement>(null)
+
+  /**
+   * 展开后把 drawer 滚到视口中：
+   *   - 主 Nav sticky 高度 = 64px
+   *   - 顶部呼吸空间 = 12px
+   *   - 让 drawer 的**顶部**正好贴在 Nav 下方，这样整个 drawer（含底部 CTA）
+   *     基本都能在一屏看到；即使被 iPhone 刘海/底部 home indicator 压一点，
+   *     CTA 也因为 drawer 内部 flex 布局 + safe-area padding 而始终可点。
+   *   - 使用双 rAF 等待 accordion transition 开始后再滚（避免位置计算偏移）
+   */
+  useEffect(() => {
+    if (!active || !drawerRef.current) return
+    const el = drawerRef.current
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const rect = el.getBoundingClientRect()
+        const NAV_H = 64
+        const BREATH = 12
+        const targetTop = window.scrollY + rect.top - NAV_H - BREATH
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' })
+      })
+    })
+    return () => cancelAnimationFrame(id)
+  }, [active?.id])
 
   return (
     <div className="mt-5">
@@ -419,11 +444,18 @@ function MobileCategoryGrid({ categories }: { categories: Category[] }) {
         })}
       </div>
 
-      {/* 展开的子项抽屉（绝对位置错觉：紧贴九宫格下方） */}
+      {/* 展开的子项抽屉（紧贴九宫格下方 · 一屏可见）
+          - 使用 dvh 动态视口高度（iOS 下会排除地址栏 + 刘海/底部 home indicator）
+          - max-height 控制为：视口 - 主 Nav(64) - drawer 顶部距离(~180，根据 Hero 文案估算)
+          - CategoryDrawer 内部自带 flex 布局，超出的子项在内部滚动，CTA 固定底部 */}
       <div
+        ref={drawerRef}
         className={`overflow-hidden transition-all duration-300 ease-out ${
-          active ? 'max-h-[640px] opacity-100 mt-3' : 'max-h-0 opacity-0 mt-0'
+          active
+            ? 'max-h-[min(640px,calc(100dvh-80px))] opacity-100 mt-3'
+            : 'max-h-0 opacity-0 mt-0'
         }`}
+        style={{ scrollMarginTop: '76px' }}
       >
         {active && <CategoryDrawer category={active} />}
       </div>
@@ -445,12 +477,14 @@ function CategoryDrawer({ category }: { category: Category }) {
   const decor = CATEGORY_DECOR[category.id]
   const drawerGrad = decor?.drawerGrad || 'from-slate-100 via-slate-50 to-slate-100'
   const titleColor = decor?.titleColor || 'text-slate-700'
-  const subColor = decor?.subColor || 'text-slate-500'
 
   return (
-    <div className={`rounded-2xl overflow-hidden bg-white ring-1 ${decor?.ringColor || 'ring-slate-200'} shadow-md animate-[fadeUp_0.3s_ease-out]`}>
+    <div
+      className={`flex flex-col rounded-2xl overflow-hidden bg-white ring-1 ${decor?.ringColor || 'ring-slate-200'} shadow-md animate-[fadeUp_0.3s_ease-out]`}
+      style={{ maxHeight: 'min(640px, calc(100dvh - 80px))' }}
+    >
       {/* 描述条（浅色粉彩 + 深色文字） */}
-      <div className={`relative px-4 py-3 bg-gradient-to-br ${drawerGrad}`}>
+      <div className={`relative shrink-0 px-4 py-3 bg-gradient-to-br ${drawerGrad}`}>
         {/* 顶部白色高光 */}
         <div className="absolute inset-x-0 top-0 h-px bg-white/70 pointer-events-none" />
         <p className={`relative text-[12px] leading-relaxed line-clamp-2 ${titleColor}`}>
@@ -458,17 +492,18 @@ function CategoryDrawer({ category }: { category: Category }) {
         </p>
       </div>
 
-      {/* 子项列表 */}
-      <ul className="divide-y divide-slate-100">
+      {/* 子项列表（超出内部滚动，保证底部 CTA 始终可见） */}
+      <ul className="flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 no-scrollbar">
         {category.items.map((item) => (
           <MobileSubItem key={item.id} item={item} />
         ))}
       </ul>
 
-      {/* Footer CTA */}
+      {/* Footer CTA（固定底部 + 安全区 padding，避开 iPhone home indicator） */}
       <Link
         to={`/category/${category.id}`}
-        className={`px-4 py-2.5 border-t border-slate-100 text-xs ${accent.solid} flex items-center justify-between bg-slate-50/60`}
+        className={`shrink-0 px-4 py-2.5 border-t border-slate-100 text-xs ${accent.solid} flex items-center justify-between bg-slate-50/60`}
+        style={{ paddingBottom: 'max(0.625rem, env(safe-area-inset-bottom))' }}
       >
         <span>查看 {category.title} 全部 {category.items.length} 项</span>
         <i className="ri-arrow-right-line" />
