@@ -153,40 +153,43 @@ export default function MilestonesPage() {
             </div>
           </div>
 
-          {/* 字音 · 一行独占 */}
-          <div className="relative mt-3 md:mt-6 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur ring-1 ring-sky-100 px-3 md:px-5 py-2 md:py-3 flex items-center gap-2 md:gap-3">
-            <span className="shrink-0 w-5 h-5 md:w-7 md:h-7 rounded md:rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center text-[10px] md:text-sm">
-              <i className="ri-volume-up-line" />
-            </span>
-            <span className="shrink-0 font-bold text-slate-800 text-xs md:text-base">字音</span>
-            <span className="text-slate-300 text-xs">|</span>
-            <span className="font-bold text-amber-600 text-sm md:text-lg tracking-wide">
-              王 · 爱 · 心园
-            </span>
-          </div>
-
-          {/* 字义 · 两字分列 */}
-          <div className="relative mt-2 md:mt-3 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur ring-1 ring-fuchsia-100 px-3 md:px-5 py-2 md:py-3">
+          {/* 字音 · 拼音拆解（爸爸 + 妈妈 拼出来的音） */}
+          <div className="relative mt-3 md:mt-6 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur ring-1 ring-sky-100 px-3 md:px-5 py-2 md:py-3">
             <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
-              <span className="shrink-0 w-5 h-5 md:w-7 md:h-7 rounded md:rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] md:text-sm">
-                <i className="ri-quill-pen-line" />
+              <span className="shrink-0 w-5 h-5 md:w-7 md:h-7 rounded md:rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center text-[10px] md:text-sm">
+                <i className="ri-volume-up-line" />
               </span>
-              <span className="shrink-0 font-bold text-slate-800 text-xs md:text-base">字义</span>
+              <span className="shrink-0 font-bold text-slate-800 text-xs md:text-base">字音</span>
+              <span className="text-[10px] md:text-xs text-sky-500 font-semibold">· 爸爸 + 妈妈 拼出的音</span>
             </div>
-            <div className="flex items-center gap-4 md:gap-8 pl-7 md:pl-10 text-xs md:text-base text-slate-600">
-              <span>
-                <span className="text-lg md:text-2xl font-black name-char leading-none mr-1.5 md:mr-2 align-middle">
-                  瑷
+            <div className="pl-7 md:pl-10 space-y-1.5 md:space-y-2 text-xs md:text-base text-slate-600">
+              {/* 瑷 ài = a + i，都来自爸爸 jiaqi */}
+              <div className="flex items-baseline flex-wrap gap-x-2 gap-y-1">
+                <span className="text-lg md:text-2xl font-black name-char leading-none">瑷</span>
+                <span className="font-bold text-sky-600 tracking-wide">ài</span>
+                <span className="text-slate-400">=</span>
+                <span className="text-sky-600 font-bold">a</span>
+                <span className="text-slate-300">+</span>
+                <span className="text-sky-600 font-bold">i</span>
+                <span className="text-[10px] md:text-xs text-slate-500">
+                  取自爸爸 <span className="font-semibold text-sky-600">ji<span className="underline decoration-sky-400 decoration-2 underline-offset-2">a</span>q<span className="underline decoration-sky-400 decoration-2 underline-offset-2">i</span></span>
                 </span>
-                <span className="align-middle">—— 美好</span>
-              </span>
-              <span className="text-slate-300">·</span>
-              <span>
-                <span className="text-lg md:text-2xl font-black name-char leading-none mr-1.5 md:mr-2 align-middle">
-                  暄
+              </div>
+              {/* 暄 xuān = x + uan，都来自妈妈 xinyuan */}
+              <div className="flex items-baseline flex-wrap gap-x-2 gap-y-1">
+                <span className="text-lg md:text-2xl font-black name-char leading-none">暄</span>
+                <span className="font-bold text-rose-600 tracking-wide">xuān</span>
+                <span className="text-slate-400">=</span>
+                <span className="text-rose-600 font-bold">x</span>
+                <span className="text-slate-300">+</span>
+                <span className="text-rose-600 font-bold">uan</span>
+                <span className="text-[10px] md:text-xs text-slate-500">
+                  取自妈妈 <span className="font-semibold text-rose-600"><span className="underline decoration-rose-400 decoration-2 underline-offset-2">x</span>iny<span className="underline decoration-rose-400 decoration-2 underline-offset-2">uan</span></span>
                 </span>
-                <span className="align-middle">—— 温暖</span>
-              </span>
+              </div>
+              <div className="pt-1 text-[11px] md:text-sm text-slate-500">
+                所以是 <span className="text-sky-600 font-semibold">爸爸</span> + <span className="text-rose-600 font-semibold">妈妈</span> · 读作 <span className="font-bold text-amber-600">王 · 爱 · 心园</span>
+              </div>
             </div>
           </div>
 
@@ -216,6 +219,31 @@ export default function MilestonesPage() {
                   <span className="text-rose-600 font-semibold">晴</span>
                 </span>
               </div>
+            </div>
+          </div>
+
+          {/* 字义 · 两字分列 */}
+          <div className="relative mt-2 md:mt-3 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur ring-1 ring-fuchsia-100 px-3 md:px-5 py-2 md:py-3">
+            <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
+              <span className="shrink-0 w-5 h-5 md:w-7 md:h-7 rounded md:rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] md:text-sm">
+                <i className="ri-quill-pen-line" />
+              </span>
+              <span className="shrink-0 font-bold text-slate-800 text-xs md:text-base">字义</span>
+            </div>
+            <div className="flex items-center gap-4 md:gap-8 pl-7 md:pl-10 text-xs md:text-base text-slate-600">
+              <span>
+                <span className="text-lg md:text-2xl font-black name-char leading-none mr-1.5 md:mr-2 align-middle">
+                  瑷
+                </span>
+                <span className="align-middle">—— 美好</span>
+              </span>
+              <span className="text-slate-300">·</span>
+              <span>
+                <span className="text-lg md:text-2xl font-black name-char leading-none mr-1.5 md:mr-2 align-middle">
+                  暄
+                </span>
+                <span className="align-middle">—— 温暖</span>
+              </span>
             </div>
           </div>
 
