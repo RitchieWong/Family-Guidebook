@@ -49,6 +49,14 @@ const CATEGORY_HERO_THEME: Record<
     corner: '💕',
     image: 'icons/categories/album.png',
   },
+  membership: {
+    softGrad: 'from-emerald-100 via-teal-50 to-sky-100',
+    titleColor: 'text-emerald-700',
+    subColor: 'text-emerald-400/80',
+    bg: '🏬',
+    corner: '🪪',
+    image: 'icons/categories/album.png',
+  },
   'mini-programs': {
     softGrad: 'from-violet-100 via-fuchsia-50 to-pink-100',
     titleColor: 'text-violet-700',

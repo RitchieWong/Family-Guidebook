@@ -13,6 +13,7 @@ import TravelLaborDay2026Page from './pages/TravelLaborDay2026Page'
 import TravelNationalDay2025Page from './pages/TravelNationalDay2025Page'
 import AlbumListPage from './pages/AlbumListPage'
 import AlbumDetailPage from './pages/AlbumDetailPage'
+import MembershipsPage from './pages/MembershipsPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 /** 路由切换时回到顶部 */
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/album" element={<AlbumListPage />} />
           <Route path="/album/milestones-xuanxuan" element={<MilestoneAlbumPage />} />
           <Route path="/album/:id" element={<AlbumDetailPage />} />
+          <Route path="/membership" element={<MembershipsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

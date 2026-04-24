@@ -153,6 +153,30 @@ export const CATEGORIES: Record<string, Category> = {
     ]
   },
 
+  // ================ 🪪 家庭会员 ================
+  membership: {
+    id: 'membership',
+    title: '家庭会员',
+    subtitle: 'Family Memberships',
+    desc: '家门口常去店铺的会员卡、每月可以领的赠品、孩子的免费游玩时段，一张清单别漏领。',
+    icon: 'ri-vip-line',
+    emoji: '🪪',
+    accent: 'emerald',
+    items: [
+      {
+        id: 'memberships-hub',
+        title: '会员 & 福利总览',
+        subtitle: 'Memberships Hub',
+        desc: '按地点看家里已经办下来的会员：龙德广场服装店、内衣店棉柔巾、淘气堡次卡 & 免费时段……',
+        cover: '🏬',
+        date: '2026-04-24',
+        tags: ['龙德广场', '次卡', '赠品', '免费时段'],
+        status: 'live',
+        to: '/membership'
+      }
+    ]
+  },
+
   // ================ 📱 亲子小程序 ================
   'mini-programs': {
     id: 'mini-programs',
@@ -197,8 +221,8 @@ export const CATEGORIES: Record<string, Category> = {
   }
 }
 
-/** 首页展示顺序：成长日记 → 旅行路书 → 家庭相册 → 小程序 */
-export const CATEGORY_ORDER = ['growth', 'travel', 'album', 'mini-programs']
+/** 首页展示顺序：成长日记 → 旅行路书 → 家庭相册 → 家庭会员 → 小程序 */
+export const CATEGORY_ORDER = ['growth', 'travel', 'album', 'membership', 'mini-programs']
 
 export function getOrderedCategories(): Category[] {
   const ordered = CATEGORY_ORDER.map(id => CATEGORIES[id]).filter(Boolean)
