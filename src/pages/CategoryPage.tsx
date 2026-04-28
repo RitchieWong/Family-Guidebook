@@ -57,6 +57,14 @@ const CATEGORY_HERO_THEME: Record<
     corner: '🪪',
     image: 'icons/categories/album.png',
   },
+  'future-home': {
+    softGrad: 'from-orange-100 via-amber-50 to-yellow-100',
+    titleColor: 'text-orange-700',
+    subColor: 'text-orange-400/80',
+    bg: '🏡',
+    corner: '🪴',
+    image: 'icons/categories/growth.png',
+  },
   'mini-programs': {
     softGrad: 'from-violet-100 via-fuchsia-50 to-pink-100',
     titleColor: 'text-violet-700',

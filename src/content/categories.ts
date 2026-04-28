@@ -177,6 +177,30 @@ export const CATEGORIES: Record<string, Category> = {
     ]
   },
 
+  // ================ 🏡 未来的家 ================
+  'future-home': {
+    id: 'future-home',
+    title: '未来的家',
+    subtitle: 'Future Home',
+    desc: '装修前先画蓝图：全屋智能、原木高级感、按摩椅、浴池……我们对家的所有期待。',
+    icon: 'ri-home-heart-line',
+    emoji: '🏡',
+    accent: 'rose',
+    items: [
+      {
+        id: 'future-home-wishlist',
+        title: '未来的家 · 构思清单',
+        subtitle: 'Dream Home Wishlist',
+        desc: '按分区整理：全屋系统、客厅厨房、卧室、阳台、卫生间、玄关收纳、生活仪式感。每一条都标好了优先级。',
+        cover: '🏡',
+        date: '2026-04-28',
+        tags: ['装修', '智能家居', '原木', '收纳'],
+        status: 'plan',
+        to: '/future-home'
+      }
+    ]
+  },
+
   // ================ 📱 亲子小程序 ================
   'mini-programs': {
     id: 'mini-programs',
@@ -221,8 +245,8 @@ export const CATEGORIES: Record<string, Category> = {
   }
 }
 
-/** 首页展示顺序：成长日记 → 旅行路书 → 家庭相册 → 家庭会员 → 小程序 */
-export const CATEGORY_ORDER = ['growth', 'travel', 'album', 'membership', 'mini-programs']
+/** 首页展示顺序：成长日记 → 旅行路书 → 家庭相册 → 家庭会员 → 未来的家 → 小程序 */
+export const CATEGORY_ORDER = ['growth', 'travel', 'album', 'membership', 'future-home', 'mini-programs']
 
 export function getOrderedCategories(): Category[] {
   const ordered = CATEGORY_ORDER.map(id => CATEGORIES[id]).filter(Boolean)
