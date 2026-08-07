@@ -42,6 +42,8 @@ export default function App() {
           <Route path="/album/daily-moments" element={<DailyMomentsPage />} />
           <Route path="/travel/2026-labor-day" element={<TravelLaborDay2026Page />} />
           <Route path="/travel/2025-national-day" element={<TravelNationalDay2025Page />} />
+          <Route path="/travel/2026-national-day" element={<TravelYunnan2026Page />} />
+          {/* 兼容曾经使用过的云南路书地址，避免旧收藏失效 */}
           <Route path="/travel/2026-yunnan" element={<TravelYunnan2026Page />} />
           <Route path="/album" element={<AlbumListPage />} />
           <Route path="/album/milestones-xuanxuan" element={<MilestoneAlbumPage />} />

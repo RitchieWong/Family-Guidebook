@@ -93,29 +93,17 @@ export const CATEGORIES: Record<string, Category> = {
         to: '/travel/2025-national-day'
       },
       {
-        id: '2026-yunnan',
-        title: '秋季 · 云南全家总动员',
+        id: '2026-national-day',
+        title: '国庆 2026 · 云南全家总动员',
         subtitle: '三代六口 · 先近后远 · 22 天环游云南',
         desc: '从昆明、抚仙湖到大理、腾冲和西双版纳：家人分批会合，7 座电车自驾搭配短飞的三段式亲子长线。',
         cover: '🐘',
         date: '2026-09-19',
         duration: '22天21晚',
         location: '云南大环线',
-        tags: ['计划中', '三代同游', '亲子', '自驾+短飞'],
-        status: 'plan',
-        to: '/travel/2026-yunnan'
-      },
-      {
-        id: '2026-national-day',
-        title: '国庆 2026 · 待定',
-        subtitle: 'Coming soon',
-        desc: '十一长假的下一次冒险，目的地还在全家投票中……',
-        cover: '🎋',
-        date: '2026-10-01',
-        duration: '待定',
-        location: '待定',
-        tags: ['计划中'],
-        status: 'plan'
+        tags: ['已上线', '国庆', '三代同游', '亲子', '自驾+短飞'],
+        status: 'live',
+        to: '/travel/2026-national-day'
       }
     ]
   },

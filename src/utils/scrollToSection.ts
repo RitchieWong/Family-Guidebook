@@ -1,7 +1,7 @@
 /**
  * 站内锚点平滑滚动工具
  *
- * 背景：本站使用 HashRouter（main.tsx），URL 形如 /#/travel/2026-labor-day。
+ * 背景：本站使用 HashRouter（main.tsx），URL 形如 /#/travel/2026-national-day。
  * 如果用原生 <a href="#dayN">，浏览器会把整个 URL hash 替换为 #dayN，
  * HashRouter 立刻读到"新路由 = /dayN"，匹配不到任何路由 → 落到 NotFound。
  *

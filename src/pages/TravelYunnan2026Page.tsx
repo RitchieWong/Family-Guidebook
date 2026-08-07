@@ -1,5 +1,6 @@
 import StickyPageNav, { type StickyNavSection } from '../components/StickyPageNav'
-import { days, globalTips, routeStages, tripMeta } from '../content/travel-2026-yunnan'
+import { bookedFlights, days, globalTips, routeStages, tripMeta } from '../content/travel-2026-yunnan'
+import { scrollToSection } from '../utils/scrollToSection'
 
 const SECTIONS: StickyNavSection[] = [
   { id: 'overview', label: '总览', emoji: '🗺️' },
@@ -41,9 +42,9 @@ const PHASES = [
     id: 'phase-back',
     range: 'D19 — D22',
     dates: '10.07 — 10.10',
-    title: '送站以后 · 昆明轻松收尾',
-    subtitle: '父母 + 暄暄 + 姥姥',
-    desc: '送爷爷奶奶返程，再看石林、九乡和昆明老街，最后从长水机场返京。',
+    title: '返昆收尾 · 分批返程',
+    subtitle: 'D19 六口同游 · D20 爷爷奶奶返程',
+    desc: '全家先共游石林，10 月 8 日送爷爷奶奶飞沈阳回盘锦，其余家人在昆明轻松收尾。',
     icon: '🌼',
     gradient: 'from-amber-500 to-orange-500',
     soft: 'from-amber-50 to-orange-50',
@@ -79,12 +80,12 @@ function Hero() {
       <div className="absolute -bottom-20 left-1/4 h-64 w-64 rounded-full bg-cyan-300/20 blur-3xl" />
       <div className="relative mx-auto max-w-7xl px-6 py-14 md:py-20 text-white">
         <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm backdrop-blur">
-          <span>计划中</span><span className="text-white/40">·</span><span>2026.09.19 — 10.10</span><span className="text-white/40">·</span><span>22 天</span>
+          <span>已上线 · 2026 国庆</span><span className="text-white/40">·</span><span>09.19 — 10.10</span><span className="text-white/40">·</span><span>22 天</span>
         </div>
         <div className="grid gap-10 lg:grid-cols-[1fr_360px] lg:items-end">
           <div>
             <div className="mb-3 text-4xl" aria-hidden>🚗 🏞️ 🐘</div>
-            <h1 className="max-w-4xl text-4xl font-black leading-tight md:text-6xl">云南全家总动员</h1>
+            <h1 className="max-w-4xl text-4xl font-black leading-tight md:text-6xl">国庆 2026 · 云南全家总动员</h1>
             <p className="mt-4 max-w-3xl text-lg leading-relaxed text-emerald-50 md:text-xl">
               三代同游，先近后远。等全家六口在昆明会合，再一路去洱海、腾冲和西双版纳。
             </p>
@@ -95,10 +96,12 @@ function Hero() {
             </div>
           </div>
           <div className="rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur-md">
-            <div className="text-xs font-bold tracking-[0.18em] text-amber-200">已定航班</div>
-            <FlightRow date="09.19" route="北京大兴 → 昆明长水" time="15:25 — 19:05" no="NS8009" />
-            <div className="my-4 h-px bg-white/15" />
-            <FlightRow date="10.10" route="昆明长水 → 北京" time="15:05 — 18:15" no="JD5630" />
+            <div className="flex items-center justify-between text-xs font-bold tracking-[0.18em] text-amber-200">
+              <span>已定航班</span><span>{bookedFlights.length} 程</span>
+            </div>
+            <div className="mt-3 divide-y divide-white/15">
+              {bookedFlights.map((flight) => <FlightRow key={`${flight.date}-${flight.flightNo}`} flight={flight} />)}
+            </div>
           </div>
         </div>
       </div>
@@ -106,13 +109,15 @@ function Hero() {
   )
 }
 
-function FlightRow({ date, route, time, no }: { date: string; route: string; time: string; no: string }) {
+function FlightRow({ flight }: { flight: (typeof bookedFlights)[number] }) {
   return (
-    <div className="mt-3 grid grid-cols-[52px_1fr] gap-3">
-      <div className="rounded-xl bg-white/10 py-2 text-center text-sm font-black">{date}</div>
+    <div className="grid grid-cols-[52px_1fr] gap-3 py-3 first:pt-0 last:pb-0">
+      <div className="rounded-xl bg-white/10 py-2 text-center text-sm font-black self-start">{flight.date}</div>
       <div>
-        <div className="font-bold">{route}</div>
-        <div className="mt-1 text-sm text-emerald-100">{time} · {no}</div>
+        <div className="font-bold">{flight.from} → {flight.to}</div>
+        <div className="mt-1 text-xs text-emerald-100">{flight.traveler}</div>
+        <div className="mt-1 text-xs text-emerald-100/80">{flight.depart} — {flight.arrive} · {flight.airline} {flight.flightNo}</div>
+        {'note' in flight && <div className="mt-1 text-xs text-amber-100">{flight.note}</div>}
       </div>
     </div>
   )
@@ -125,12 +130,17 @@ function RouteOverview() {
         <div className="mb-8 max-w-3xl">
           <div className="text-sm font-bold tracking-[0.16em] text-emerald-700">ROUTE OVERVIEW</div>
           <h2 className="mt-2 text-3xl font-black md:text-4xl">三段式路线，一眼看懂谁和谁一起玩</h2>
-          <p className="mt-3 text-slate-600">把 17 个停靠节点收进三段旅程，集合与返程节点单独突出，长行程也不容易看乱。</p>
+          <p className="mt-3 text-slate-600">把 {routeStages.length} 个停靠节点收进三段旅程，集合与返程节点单独突出，长行程也不容易看乱。</p>
         </div>
 
         <div className="grid gap-4 lg:grid-cols-3">
           {PHASES.map((phase) => (
-            <a key={phase.id} href={`#${phase.id}`} className={`group rounded-3xl border ${phase.border} bg-gradient-to-br ${phase.soft} p-5 transition hover:-translate-y-0.5 hover:shadow-lg`}>
+            <a
+              key={phase.id}
+              href={`#${phase.id}`}
+              onClick={(event) => scrollToSection(event, phase.id)}
+              className={`group rounded-3xl border ${phase.border} bg-gradient-to-br ${phase.soft} p-5 transition hover:-translate-y-0.5 hover:shadow-lg`}
+            >
               <div className="flex items-start justify-between gap-4">
                 <span className="text-3xl">{phase.icon}</span>
                 <span className="rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-slate-600">{phase.range}</span>

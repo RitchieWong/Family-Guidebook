@@ -228,7 +228,7 @@ export default function HomePage() {
                   <i className="ri-arrow-right-line group-hover:translate-x-1 transition" />
                 </Link>
                 <Link
-                  to="/travel/2026-labor-day"
+                  to="/travel/2026-national-day"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/90 backdrop-blur text-slate-700 text-sm font-semibold ring-1 ring-slate-200 hover:ring-rose-300 hover:text-rose-600 hover:-translate-y-0.5 transition-all shadow-sm"
                 >
                   <i className="ri-road-map-line text-base" />
