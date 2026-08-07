@@ -11,6 +11,7 @@ import GiftsPage from './pages/GiftsPage'
 import DailyMomentsPage from './pages/DailyMomentsPage'
 import TravelLaborDay2026Page from './pages/TravelLaborDay2026Page'
 import TravelNationalDay2025Page from './pages/TravelNationalDay2025Page'
+import TravelYunnan2026Page from './pages/TravelYunnan2026Page'
 import AlbumListPage from './pages/AlbumListPage'
 import AlbumDetailPage from './pages/AlbumDetailPage'
 import MembershipsPage from './pages/MembershipsPage'
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/album/daily-moments" element={<DailyMomentsPage />} />
           <Route path="/travel/2026-labor-day" element={<TravelLaborDay2026Page />} />
           <Route path="/travel/2025-national-day" element={<TravelNationalDay2025Page />} />
+          <Route path="/travel/2026-yunnan" element={<TravelYunnan2026Page />} />
           <Route path="/album" element={<AlbumListPage />} />
           <Route path="/album/milestones-xuanxuan" element={<MilestoneAlbumPage />} />
           <Route path="/album/:id" element={<AlbumDetailPage />} />
