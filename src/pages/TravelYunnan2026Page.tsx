@@ -14,37 +14,37 @@ const SECTIONS: StickyNavSection[] = [
 const PHASES = [
   {
     id: 'phase-near',
-    range: 'D1 — D7',
-    dates: '09.19 — 09.25',
-    title: '昆明周边 · 等爷爷会合',
+    range: 'D1 — D8',
+    dates: '09.19 — 09.26',
+    title: '弥勒与抚仙湖 · 接爷爷会合',
     subtitle: '父母 + 暄暄 + 姥姥 + 奶奶',
-    desc: '以昆明为中心先玩滇池、抚仙湖、建水、弥勒、普者黑和罗平，D7 晚回昆明接爷爷。',
+    desc: '先玩昆明和弥勒，再到抚仙湖连住；D7 爸爸单独往返长水机场接爷爷，D8 六口一起玩湖。',
     icon: '🌿',
     gradient: 'from-emerald-500 to-teal-500',
     soft: 'from-emerald-50 to-teal-50',
     border: 'border-emerald-100',
-    days: days.slice(0, 7),
+    days: days.slice(0, 8),
   },
   {
     id: 'phase-far',
-    range: 'D8 — D18',
-    dates: '09.26 — 10.06',
+    range: 'D9 — D18',
+    dates: '09.27 — 10.06',
     title: '全家六口 · 滇西南远游',
     subtitle: '爷爷加入 · 核心景点一起走',
-    desc: '大理、腾冲、芒市、普洱一路南下至西双版纳，最后从景洪短飞回昆明。',
+    desc: '先在大理连住，再用一个超长驾驶日直达普洱，随后短途进入西双版纳；全段不开内部航班。',
     icon: '🐘',
     gradient: 'from-cyan-500 to-sky-500',
     soft: 'from-cyan-50 to-sky-50',
     border: 'border-cyan-100',
-    days: days.slice(7, 18),
+    days: days.slice(8, 18),
   },
   {
     id: 'phase-back',
     range: 'D19 — D22',
     dates: '10.07 — 10.10',
     title: '返昆收尾 · 分批返程',
-    subtitle: 'D19 六口同游 · D20 爷爷奶奶返程',
-    desc: '全家先共游石林，10 月 8 日送爷爷奶奶飞沈阳回盘锦，其余家人在昆明轻松收尾。',
+    subtitle: '爷爷奶奶动车返昆 · 其余四人继续自驾',
+    desc: 'D19 爷爷奶奶从版纳动车回昆明，其余四人开车去普洱；玩一天茶咖庄园后开回昆明。',
     icon: '🌼',
     gradient: 'from-amber-500 to-orange-500',
     soft: 'from-amber-50 to-orange-50',
@@ -87,10 +87,10 @@ function Hero() {
             <div className="mb-3 text-4xl" aria-hidden>🚗 🏞️ 🐘</div>
             <h1 className="max-w-4xl text-4xl font-black leading-tight md:text-6xl">国庆 2026 · 云南全家总动员</h1>
             <p className="mt-4 max-w-3xl text-lg leading-relaxed text-emerald-50 md:text-xl">
-              三代同游，先近后远。等全家六口在昆明会合，再一路去洱海、腾冲和西双版纳。
+              三代同游，先到抚仙湖等爷爷，再全程开车走大理、普洱和西双版纳。
             </p>
             <div className="mt-7 flex flex-wrap gap-2 text-sm text-emerald-50">
-              {['三代六口', '2 岁宝宝', '全程 2000m 内', '7 座电车 + 短飞'].map((item) => (
+              {['三代六口', '2 岁宝宝', '全程 2000m 内', '7 座租车全程自驾'].map((item) => (
                 <span key={item} className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5">{item}</span>
               ))}
             </div>
@@ -204,7 +204,7 @@ function DayCard({ day, gradient }: { day: TripDay; gradient: string }) {
     <article className="overflow-hidden rounded-3xl border border-white bg-white shadow-sm">
       <div className="grid lg:grid-cols-[260px_1fr]">
         <div className="relative min-h-52 overflow-hidden bg-slate-100 lg:min-h-full">
-          {image && <img src={image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition duration-500 hover:scale-105" />}
+          {image && <img src={image} alt={day.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition duration-500 hover:scale-105" />}
           <div className={`absolute left-4 top-4 rounded-xl bg-gradient-to-br ${gradient} px-3 py-2 text-sm font-black text-white shadow-lg`}>D{day.id}</div>
           <div className="absolute bottom-4 left-4 rounded-full bg-slate-950/70 px-3 py-1 text-xs font-semibold text-white backdrop-blur">海拔 {day.alt}</div>
         </div>

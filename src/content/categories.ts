@@ -96,12 +96,12 @@ export const CATEGORIES: Record<string, Category> = {
         id: '2026-national-day',
         title: '国庆 2026 · 云南全家总动员',
         subtitle: '三代六口 · 先近后远 · 22 天环游云南',
-        desc: '从昆明、抚仙湖到大理、腾冲和西双版纳：家人分批会合，7 座电车自驾搭配短飞的三段式亲子长线。',
+        desc: '昆明、弥勒、抚仙湖、大理、普洱到西双版纳：抚仙湖接爷爷，城市更精简的全程自驾。',
         cover: '🐘',
         date: '2026-09-19',
         duration: '22天21晚',
         location: '云南大环线',
-        tags: ['已上线', '国庆', '三代同游', '亲子', '自驾+短飞'],
+        tags: ['已上线', '国庆', '三代同游', '亲子', '全程自驾'],
         status: 'live',
         to: '/travel/2026-national-day'
       }
