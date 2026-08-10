@@ -258,7 +258,19 @@ function DayPanel({ day, cityName }: { day: TripDay; cityName: string }) {
     <article role="tabpanel" className="animate-[fadeUp_240ms_ease-out]">
       <div className="grid lg:grid-cols-[240px_1fr]">
         <div className="relative min-h-44 overflow-hidden bg-slate-100 lg:min-h-full">
-          {image && <img src={image} alt={day.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition duration-500 hover:scale-105" />}
+          {image && (
+            <img
+              src={image}
+              srcSet={responsiveImageSrcSet(image)}
+              sizes="(min-width: 1024px) 240px, calc(100vw - 3rem)"
+              width="1200"
+              height="675"
+              alt={day.title}
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover transition duration-500 hover:scale-105"
+            />
+          )}
           <div className="absolute left-4 top-4 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 px-3 py-2 text-sm font-black text-white shadow-lg">D{day.id}</div>
           <div className="absolute bottom-4 left-4 rounded-full bg-slate-950/70 px-3 py-1 text-xs font-semibold text-white backdrop-blur">海拔 {day.alt}</div>
         </div>
@@ -295,6 +307,12 @@ function DayPanel({ day, cityName }: { day: TripDay; cityName: string }) {
       </div>
     </article>
   )
+}
+
+function responsiveImageSrcSet(image: string) {
+  return [480, 800, 1200]
+    .map((width) => `${image.replace(/\.webp$/, `-${width}w.webp`)} ${width}w`)
+    .join(', ')
 }
 
 function splitSchedule(day: TripDay) {
