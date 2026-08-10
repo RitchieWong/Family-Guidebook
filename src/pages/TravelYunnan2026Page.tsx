@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import StickyPageNav, { type StickyNavSection } from '../components/StickyPageNav'
 import { bookedFlights, days, globalTips, routeStages, tripMeta } from '../content/travel-2026-yunnan'
 import { scrollToSection } from '../utils/scrollToSection'
@@ -5,9 +6,7 @@ import { scrollToSection } from '../utils/scrollToSection'
 const SECTIONS: StickyNavSection[] = [
   { id: 'overview', label: '总览', emoji: '🗺️' },
   { id: 'route', label: '路线', emoji: '🧭' },
-  { id: 'phase-near', label: '昆明周边', emoji: '①' },
-  { id: 'phase-far', label: '六口远游', emoji: '②' },
-  { id: 'phase-back', label: '返昆收尾', emoji: '③' },
+  { id: 'itinerary', label: '逐日安排', emoji: '📅' },
   { id: 'tips', label: '要点', emoji: '💡' },
 ]
 
@@ -53,6 +52,17 @@ const PHASES = [
   },
 ] as const
 
+const CITY_STOPS = [
+  { id: 'kunming-arrival', name: '昆明', icon: '🌼', note: '抵达与滇池适应', dayIds: [1, 2] },
+  { id: 'mile', name: '弥勒', icon: '🌿', note: '红砖艺术与当季花景', dayIds: [3, 4] },
+  { id: 'fuxian', name: '抚仙湖', icon: '🏖️', note: '湖边连住，接爷爷会合', dayIds: [5, 6, 7, 8] },
+  { id: 'dali', name: '大理', icon: '🏞️', note: '洱海、喜洲与古城', dayIds: [9, 10, 11] },
+  { id: 'puer-outbound', name: '普洱', icon: '🐾', note: '森林动物与茶咖庄园', dayIds: [12, 13, 14] },
+  { id: 'banna', name: '西双版纳', icon: '🐘', note: '雨林、傣家与热带植物', dayIds: [15, 16, 17, 18] },
+  { id: 'puer-return', name: '普洱·返程', icon: '☕', note: '分头返程与茶咖慢游', dayIds: [19, 20] },
+  { id: 'kunming-return', name: '昆明·返程', icon: '✈️', note: '回到还车城市返京', dayIds: [21, 22] },
+] as const
+
 export default function TravelYunnan2026Page() {
   return (
     <div className="bg-[#f7faf7]">
@@ -64,9 +74,7 @@ export default function TravelYunnan2026Page() {
 
       <Hero />
       <RouteOverview />
-      {PHASES.map((phase) => (
-        <PhaseSection key={phase.id} phase={phase} />
-      ))}
+      <ItineraryTabs />
       <TripTips />
     </div>
   )
@@ -137,8 +145,8 @@ function RouteOverview() {
           {PHASES.map((phase) => (
             <a
               key={phase.id}
-              href={`#${phase.id}`}
-              onClick={(event) => scrollToSection(event, phase.id)}
+              href="#itinerary"
+              onClick={(event) => scrollToSection(event, 'itinerary')}
               className={`group rounded-3xl border ${phase.border} bg-gradient-to-br ${phase.soft} p-5 transition hover:-translate-y-0.5 hover:shadow-lg`}
             >
               <div className="flex items-start justify-between gap-4">
@@ -170,73 +178,141 @@ function RouteOverview() {
   )
 }
 
-type Phase = (typeof PHASES)[number]
 type TripDay = (typeof days)[number]
 
-function PhaseSection({ phase }: { phase: Phase }) {
+function ItineraryTabs() {
+  const [activeCityId, setActiveCityId] = useState<(typeof CITY_STOPS)[number]['id']>('kunming-arrival')
+  const [activeDayId, setActiveDayId] = useState(1)
+  const activeCity = CITY_STOPS.find((city) => city.id === activeCityId) ?? CITY_STOPS[0]
+  const cityDays = activeCity.dayIds
+    .map((dayId) => days.find((day) => day.id === dayId))
+    .filter((day): day is TripDay => Boolean(day))
+  const activeDay = cityDays.find((day) => day.id === activeDayId) ?? cityDays[0]
+
+  const selectCity = (city: (typeof CITY_STOPS)[number]) => {
+    setActiveCityId(city.id)
+    setActiveDayId(city.dayIds[0])
+  }
+
   return (
-    <section id={phase.id} className={`scroll-mt-24 border-t ${phase.border} bg-gradient-to-b ${phase.soft} py-12 md:py-16`}>
+    <section id="itinerary" className="scroll-mt-32 border-t border-emerald-100 bg-gradient-to-b from-emerald-50 to-[#f7faf7] py-10 md:py-14">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${phase.gradient} text-2xl text-white shadow-lg`}>{phase.icon}</span>
-              <div>
-                <div className="text-xs font-bold tracking-[0.16em] text-slate-500">{phase.range} · {phase.dates}</div>
-                <h2 className="mt-1 text-2xl font-black md:text-3xl">{phase.title}</h2>
-              </div>
-            </div>
-            <p className="mt-3 max-w-3xl text-slate-600">{phase.desc}</p>
-          </div>
-          <div className="shrink-0 rounded-full bg-white/80 px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">👨‍👩‍👧 {phase.subtitle}</div>
+        <div className="mb-6">
+          <div className="text-sm font-bold tracking-[0.16em] text-emerald-700">DAILY ITINERARY</div>
+          <h2 className="mt-2 text-3xl font-black md:text-4xl">按城市选大项，按天切换安排</h2>
+          <p className="mt-3 text-slate-600">一次只看一天，上午、中午、下午的节奏在一屏内对齐。</p>
         </div>
-        <div className="space-y-5">
-          {phase.days.map((day) => <DayCard key={day.id} day={day} gradient={phase.gradient} />)}
+
+        <div className="no-scrollbar flex gap-3 overflow-x-auto pb-3" role="tablist" aria-label="选择城市">
+          {CITY_STOPS.map((city) => {
+            const selected = city.id === activeCity.id
+            return (
+              <button
+                key={city.id}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                onClick={() => selectCity(city)}
+                className={`min-w-[168px] rounded-2xl border px-4 py-3 text-left transition md:min-w-0 md:flex-1 ${selected ? 'border-emerald-500 bg-emerald-700 text-white shadow-lg shadow-emerald-900/10' : 'border-emerald-100 bg-white text-slate-700 hover:border-emerald-300'}`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-xl" aria-hidden>{city.icon}</span>
+                  <span className={`text-xs font-bold ${selected ? 'text-emerald-100' : 'text-slate-400'}`}>{city.dayIds.length} 天</span>
+                </div>
+                <div className="mt-2 text-lg font-black">{city.name}</div>
+                <div className={`mt-1 text-xs ${selected ? 'text-emerald-100' : 'text-slate-500'}`}>{city.note}</div>
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="mt-3 overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-sm">
+          <div className="no-scrollbar flex gap-2 overflow-x-auto border-b border-slate-100 bg-slate-50/80 px-4 py-3" role="tablist" aria-label={`${activeCity.name}逐日安排`}>
+            {cityDays.map((day) => {
+              const selected = day.id === activeDay.id
+              return (
+                <button
+                  key={day.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  onClick={() => setActiveDayId(day.id)}
+                  className={`shrink-0 rounded-xl px-4 py-2 text-sm font-bold transition ${selected ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:text-emerald-700'}`}
+                >
+                  D{day.id} <span className={selected ? 'text-emerald-100' : 'text-slate-400'}>{day.date.split(' ')[1]}</span>
+                </button>
+              )
+            })}
+          </div>
+          <DayPanel key={activeDay.id} day={activeDay} cityName={activeCity.name} />
         </div>
       </div>
     </section>
   )
 }
 
-function DayCard({ day, gradient }: { day: TripDay; gradient: string }) {
+function DayPanel({ day, cityName }: { day: TripDay; cityName: string }) {
   const image = day.img ? tripMeta.images[day.img as keyof typeof tripMeta.images] : undefined
+  const schedule = splitSchedule(day)
   return (
-    <article className="overflow-hidden rounded-3xl border border-white bg-white shadow-sm">
-      <div className="grid lg:grid-cols-[260px_1fr]">
-        <div className="relative min-h-52 overflow-hidden bg-slate-100 lg:min-h-full">
+    <article role="tabpanel" className="animate-[fadeUp_240ms_ease-out]">
+      <div className="grid lg:grid-cols-[240px_1fr]">
+        <div className="relative min-h-44 overflow-hidden bg-slate-100 lg:min-h-full">
           {image && <img src={image} alt={day.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition duration-500 hover:scale-105" />}
-          <div className={`absolute left-4 top-4 rounded-xl bg-gradient-to-br ${gradient} px-3 py-2 text-sm font-black text-white shadow-lg`}>D{day.id}</div>
+          <div className="absolute left-4 top-4 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 px-3 py-2 text-sm font-black text-white shadow-lg">D{day.id}</div>
           <div className="absolute bottom-4 left-4 rounded-full bg-slate-950/70 px-3 py-1 text-xs font-semibold text-white backdrop-blur">海拔 {day.alt}</div>
         </div>
-        <div className="p-5 md:p-7">
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500">
-            <span className="rounded-full bg-slate-100 px-3 py-1">{day.date}</span>
-            <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">📍 {day.city}</span>
-          </div>
-          <h3 className="mt-4 text-xl font-black leading-snug text-slate-800 md:text-2xl">{day.title}</h3>
-          <div className="mt-4 grid gap-5 xl:grid-cols-[1fr_280px]">
-            <ul className="space-y-2.5">
-              {day.schedule.map((item, index) => (
-                <li key={index} className="flex gap-3 text-sm leading-relaxed text-slate-600">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="space-y-3 text-sm">
+        <div className="p-5 md:p-6">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+            <div>
+              <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500">
+                <span className="rounded-full bg-slate-100 px-3 py-1">{day.date}</span>
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">📍 {cityName} · {day.city}</span>
+              </div>
+              <h3 className="mt-3 text-xl font-black leading-snug text-slate-800 md:text-2xl">{day.title}</h3>
+            </div>
+            <div className="grid shrink-0 gap-2 text-sm sm:grid-cols-2 xl:w-[430px]">
               <InfoBox icon="ri-road-map-line" label="路程" value={day.drive} />
               <InfoBox icon="ri-hotel-line" label="住宿" value={day.hotel} />
             </div>
           </div>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {day.play.map((item) => <span key={item} className="rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800">{item}</span>)}
+
+          <div className="mt-5 grid gap-3 md:grid-cols-3">
+            <SchedulePeriod icon="🌤️" label="上午" items={schedule.morning} empty="自然醒 / 整理行装" />
+            <SchedulePeriod icon="🍜" label="中午" items={schedule.noon} empty="午餐 / 宝宝午睡" />
+            <SchedulePeriod icon="🌇" label="下午 · 晚上" items={schedule.afternoon} empty="轻松活动 / 早点休息" />
           </div>
-          <div className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-sm leading-relaxed text-emerald-900">
-            <span className="font-bold">💡 当日提醒：</span>{day.tips}
+
+          <div className="mt-4 flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+            <div className="flex flex-wrap gap-2">
+              {day.play.map((item) => <span key={item} className="rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800">{item}</span>)}
+            </div>
+            <div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-2.5 text-sm leading-relaxed text-emerald-900 xl:max-w-2xl">
+              <span className="font-bold">💡 当日提醒：</span>{day.tips}
+            </div>
           </div>
         </div>
       </div>
     </article>
+  )
+}
+
+function splitSchedule(day: TripDay) {
+  if (day.id === 1) return { morning: [], noon: [], afternoon: [...day.schedule] }
+  if (day.id === 22) return { morning: day.schedule.slice(0, 1), noon: [], afternoon: day.schedule.slice(1) }
+  return { morning: day.schedule.slice(0, 1), noon: day.schedule.slice(1, 2), afternoon: day.schedule.slice(2) }
+}
+
+function SchedulePeriod({ icon, label, items, empty }: { icon: string; label: string; items: readonly string[]; empty: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-100 bg-slate-50/80 p-4">
+      <div className="mb-2 flex items-center gap-2 font-black text-slate-800"><span aria-hidden>{icon}</span>{label}</div>
+      {items.length > 0 ? (
+        <ul className="space-y-1.5">
+          {items.map((item) => <li key={item} className="text-sm leading-relaxed text-slate-600">{item}</li>)}
+        </ul>
+      ) : <p className="text-sm text-slate-400">{empty}</p>}
+    </div>
   )
 }
 
