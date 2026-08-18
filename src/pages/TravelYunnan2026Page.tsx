@@ -43,7 +43,7 @@ const PHASES = [
     dates: '10.07 — 10.10',
     title: '返昆收尾 · 分批返程',
     subtitle: '爷爷奶奶动车返昆 · 其余四人继续自驾',
-    desc: 'D19 爷爷奶奶从版纳动车回昆明，其余四人开车去普洱；玩一天茶咖庄园后开回昆明。',
+    desc: 'D19 爷爷奶奶从版纳动车回昆明，其余四人长途开到建水；D20玩米轨与古城，D21短途返昆。',
     icon: '🌼',
     gradient: 'from-amber-500 to-orange-500',
     soft: 'from-amber-50 to-orange-50',
@@ -59,7 +59,7 @@ const CITY_STOPS = [
   { id: 'dali', name: '大理', icon: '🏞️', note: '三塔、洱海、喜洲与扎染', dayIds: [8, 9, 10, 11] },
   { id: 'puer-outbound', name: '普洱', icon: '🐾', note: '森林动物与茶咖庄园', dayIds: [12, 13, 14] },
   { id: 'banna', name: '西双版纳', icon: '🐘', note: '雨林、傣家与热带植物', dayIds: [15, 16, 17, 18] },
-  { id: 'puer-return', name: '普洱·返程', icon: '☕', note: '分头返程与茶咖慢游', dayIds: [19, 20] },
+  { id: 'jianshui-return', name: '建水', icon: '🚂', note: '米轨小火车与临安古城', dayIds: [19, 20] },
   { id: 'kunming-return', name: '昆明·返程', icon: '✈️', note: '回到还车城市返京', dayIds: [21, 22] },
 ] as const
 
@@ -95,7 +95,7 @@ function Hero() {
             <div className="mb-3 text-4xl" aria-hidden>🚗 🏞️ 🐘</div>
             <h1 className="max-w-4xl text-4xl font-black leading-tight md:text-6xl">国庆 2026 · 云南全家总动员</h1>
             <p className="mt-4 max-w-3xl text-lg leading-relaxed text-emerald-50 md:text-xl">
-              三代同游，先到抚仙湖等爷爷，再全程开车走大理、普洱和西双版纳。
+              三代同游，先到抚仙湖等爷爷，再全程开车走大理、普洱、西双版纳和建水。
             </p>
             <div className="mt-7 flex flex-wrap gap-2 text-sm text-emerald-50">
               {['三代六口', '2 岁宝宝', '全程 2000m 内', '7 座租车全程自驾'].map((item) => (
