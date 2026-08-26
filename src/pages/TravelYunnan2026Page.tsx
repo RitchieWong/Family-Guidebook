@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import StickyPageNav, { type StickyNavSection } from '../components/StickyPageNav'
-import { bookedFlights, days, globalTips, routeStages, tripMeta } from '../content/travel-2026-yunnan'
+import { bookedFlights, bookedHotels, days, globalTips, routeStages, tripMeta } from '../content/travel-2026-yunnan'
 import { scrollToSection } from '../utils/scrollToSection'
+import { amapNavigateUrl } from '../utils/mapNav'
 
 const SECTIONS: StickyNavSection[] = [
   { id: 'overview', label: '总览', emoji: '🗺️' },
   { id: 'route', label: '路线', emoji: '🧭' },
   { id: 'itinerary', label: '逐日安排', emoji: '📅' },
+  { id: 'hotels', label: '住宿', emoji: '🏨' },
   { id: 'tips', label: '要点', emoji: '💡' },
 ]
 
@@ -75,6 +77,7 @@ export default function TravelYunnan2026Page() {
       <Hero />
       <RouteOverview />
       <ItineraryTabs />
+      <Hotels />
       <TripTips />
     </div>
   )
@@ -254,6 +257,7 @@ function ItineraryTabs() {
 function DayPanel({ day, cityName }: { day: TripDay; cityName: string }) {
   const image = day.img ? tripMeta.images[day.img as keyof typeof tripMeta.images] : undefined
   const schedule = splitSchedule(day)
+  const hotel = day.hotelId ? bookedHotels.find((item) => item.id === day.hotelId) : undefined
   return (
     <article role="tabpanel" className="animate-[fadeUp_240ms_ease-out]">
       <div className="grid lg:grid-cols-[240px_1fr]">
@@ -285,7 +289,7 @@ function DayPanel({ day, cityName }: { day: TripDay; cityName: string }) {
             </div>
             <div className="grid shrink-0 gap-2 text-sm sm:grid-cols-2 xl:w-[430px]">
               <InfoBox icon="ri-road-map-line" label="路程" value={day.drive} />
-              <InfoBox icon="ri-hotel-line" label="住宿" value={day.hotel} />
+              {hotel ? <HotelStayBox hotel={hotel} /> : <InfoBox icon="ri-hotel-line" label="住宿" value="当日返程，无住宿" />}
             </div>
           </div>
 
@@ -306,6 +310,29 @@ function DayPanel({ day, cityName }: { day: TripDay; cityName: string }) {
         </div>
       </div>
     </article>
+  )
+}
+
+type BookedHotel = (typeof bookedHotels)[number]
+
+function HotelStayBox({ hotel }: { hotel: BookedHotel }) {
+  return (
+    <div className="rounded-2xl bg-emerald-50 p-3.5">
+      <div className="mb-1 flex items-center justify-between gap-2 text-xs font-bold text-emerald-700">
+        <span><i className="ri-hotel-line mr-1" />今晚住宿</span>
+        <span>{hotel.status}</span>
+      </div>
+      <div className="line-clamp-2 leading-relaxed text-slate-700">{hotel.name}</div>
+      <a
+        href={amapNavigateUrl({ to: hotel.nav })}
+        target="_blank"
+        rel="noreferrer"
+        className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-2.5 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-700"
+        aria-label={`导航到${hotel.name}`}
+      >
+        <i className="ri-navigation-fill" />定位导航
+      </a>
+    </div>
   )
 }
 
@@ -342,6 +369,64 @@ function InfoBox({ icon, label, value }: { icon: string; label: string; value: s
     </div>
   )
 }
+
+function Hotels() {
+  const totalNights = bookedHotels.reduce((sum, hotel) => sum + hotel.nights, 0)
+
+  return (
+    <section id="hotels" className="scroll-mt-24 bg-white py-12 md:py-16">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <div className="text-sm font-bold tracking-[0.16em] text-emerald-700">ACCOMMODATION</div>
+            <h2 className="mt-2 text-3xl font-black md:text-4xl">已预订住宿</h2>
+            <p className="mt-3 text-slate-600">{bookedHotels.length} 笔订单·共 {totalNights} 晚，从入住日期到导航入口统一放在路书里。</p>
+          </div>
+          <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800">
+            <i className="ri-information-line mr-1" />截图未显示门牌号，当前导航会先在高德搜索订单名称
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {bookedHotels.map((hotel, index) => (
+            <article key={hotel.id} className="overflow-hidden rounded-3xl border border-slate-100 bg-slate-50/60 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+              <div className={`bg-gradient-to-r ${HOTEL_GRADIENTS[index % HOTEL_GRADIENTS.length]} p-5 text-white`}>
+                <div className="flex items-center justify-between gap-3 text-xs font-bold">
+                  <span>📍 {hotel.city}</span>
+                  <span className="rounded-full bg-white/20 px-2.5 py-1 backdrop-blur">{hotel.status}</span>
+                </div>
+                <h3 className="mt-3 min-h-12 text-lg font-black leading-snug">{hotel.name}</h3>
+              </div>
+              <div className="p-5">
+                <div className="flex items-center justify-between gap-4 border-b border-slate-200 pb-3 text-sm">
+                  <span className="font-bold text-slate-800">{hotel.checkIn} 入住 → {hotel.checkOut} 退房</span>
+                  <span className="shrink-0 text-slate-500">{hotel.nights} 晚</span>
+                </div>
+                <div className="mt-3 text-sm leading-relaxed text-slate-600"><i className="ri-hotel-bed-line mr-1 text-emerald-600" />{hotel.room}</div>
+                <div className="mt-1 text-xs text-slate-400">预订平台：{hotel.source}</div>
+                <a
+                  href={amapNavigateUrl({ to: hotel.nav })}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700"
+                >
+                  <i className="ri-navigation-fill" />高德定位导航
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const HOTEL_GRADIENTS = [
+  'from-emerald-600 to-teal-500',
+  'from-cyan-600 to-sky-500',
+  'from-amber-500 to-orange-500',
+  'from-violet-600 to-purple-500',
+]
 
 function TripTips() {
   return (
