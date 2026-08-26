@@ -26,6 +26,8 @@ const SRC = 'family-guidebook' // 高德要求的来源标识
 export interface Place {
   name: string
   address?: string
+  /** 地址来自酒店公开详情页或订单完整地址；没有经纬度时仍需地图二次确认 */
+  verifiedAddress?: boolean
   /** 经度（GCJ-02 高德坐标系） */
   lng?: number
   /** 纬度（GCJ-02 高德坐标系） */
@@ -78,6 +80,21 @@ export function amapSearchUrl(keyword: string, city?: string): string {
   })
   if (city) params.set('city', city)
   return `${AMAP_BASE}/search?${params.toString()}`
+}
+
+/** Apple 地图搜索：iPhone 会优先唤起系统地图，适合作为高德 URI 的移动端备用入口。 */
+export function appleMapsSearchUrl(place: Place): string {
+  const query = place.address
+    ? `${place.name} ${place.address}`
+    : `${place.city || ''} ${place.name}`.trim()
+  return `https://maps.apple.com/?${new URLSearchParams({ q: query }).toString()}`
+}
+
+/** 供复制到预订平台客服、微信管家或任意地图 App 的统一定位文本。 */
+export function placeLocationText(place: Place): string {
+  return place.address
+    ? `${place.name}｜${place.address}`
+    : `${place.city || ''} ${place.name}`.trim()
 }
 
 /**

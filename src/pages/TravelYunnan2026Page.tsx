@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import StickyPageNav, { type StickyNavSection } from '../components/StickyPageNav'
-import { bookedFlights, bookedHotels, days, globalTips, routeStages, tripMeta } from '../content/travel-2026-yunnan'
+import { bookedFlights, bookedHotels, dayDriveReferences, days, globalTips, routeStages, tripMeta } from '../content/travel-2026-yunnan'
 import { scrollToSection } from '../utils/scrollToSection'
-import { amapNavigateUrl } from '../utils/mapNav'
+import { amapNavigateUrl, appleMapsSearchUrl, placeLocationText } from '../utils/mapNav'
 
 const SECTIONS: StickyNavSection[] = [
   { id: 'overview', label: '总览', emoji: '🗺️' },
@@ -17,9 +17,9 @@ const PHASES = [
     id: 'phase-near',
     range: 'D1 — D7',
     dates: '09.19 — 09.25',
-    title: '弥勒与抚仙湖 · 接爷爷会合',
+    title: '弥勒与抚仙湖 · 禄充会合',
     subtitle: '父母 + 暄暄 + 姥姥 + 奶奶',
-    desc: '先玩昆明和弥勒，再到抚仙湖连住三晚；D7 爸爸单独往返长水机场接爷爷。',
+    desc: '先玩昆明和弥勒，再到抚仙湖住三晚；D7全家自然醒去禄充，爷爷落地后打车到景区会合。',
     icon: '🌿',
     gradient: 'from-emerald-500 to-teal-500',
     soft: 'from-emerald-50 to-teal-50',
@@ -57,12 +57,12 @@ const PHASES = [
 const CITY_STOPS = [
   { id: 'kunming-arrival', name: '昆明', icon: '🌼', note: '抵达与滇池适应', dayIds: [1, 2] },
   { id: 'mile', name: '弥勒', icon: '🌿', note: '红砖艺术与当季花景', dayIds: [3, 4] },
-  { id: 'fuxian', name: '抚仙湖', icon: '🏖️', note: '湖边连住三晚，接爷爷会合', dayIds: [5, 6, 7] },
+  { id: 'fuxian', name: '抚仙湖', icon: '🏖️', note: '小湾村、湿地湖岸与禄充会合', dayIds: [5, 6, 7] },
   { id: 'dali', name: '大理', icon: '🏞️', note: '三塔、洱海、喜洲与扎染', dayIds: [8, 9, 10, 11] },
-  { id: 'puer-outbound', name: '普洱', icon: '🐾', note: '森林动物与茶咖庄园', dayIds: [12, 13, 14] },
+  { id: 'puer-outbound', name: '普洱', icon: '🐾', note: 'D13小熊猫与D14市区咖啡', dayIds: [12, 13, 14] },
   { id: 'banna', name: '西双版纳', icon: '🐘', note: '雨林、傣家与热带植物', dayIds: [15, 16, 17, 18] },
   { id: 'jianshui-return', name: '建水', icon: '🚂', note: '米轨小火车与临安古城', dayIds: [19, 20] },
-  { id: 'kunming-return', name: '昆明·返程', icon: '✈️', note: '回到还车城市返京', dayIds: [21, 22] },
+  { id: 'kunming-return', name: '昆明·返程', icon: '✈️', note: '妈咪多肉花园与返京', dayIds: [21, 22] },
 ] as const
 
 export default function TravelYunnan2026Page() {
@@ -98,7 +98,7 @@ function Hero() {
             <div className="mb-3 text-4xl" aria-hidden>🚗 🏞️ 🐘</div>
             <h1 className="max-w-4xl text-4xl font-black leading-tight md:text-6xl">国庆 2026 · 云南全家总动员</h1>
             <p className="mt-4 max-w-3xl text-lg leading-relaxed text-emerald-50 md:text-xl">
-              三代同游，先到抚仙湖等爷爷，再全程开车走大理、普洱、西双版纳和建水。
+              三代同游，抚仙湖禄充与爷爷会合，再全程开车走大理、普洱、西双版纳和建水。
             </p>
             <div className="mt-7 flex flex-wrap gap-2 text-sm text-emerald-50">
               {['三代六口', '2 岁宝宝', '全程 2000m 内', '7 座租车全程自驾'].map((item) => (
@@ -258,6 +258,7 @@ function DayPanel({ day, cityName }: { day: TripDay; cityName: string }) {
   const image = day.img ? tripMeta.images[day.img as keyof typeof tripMeta.images] : undefined
   const schedule = splitSchedule(day)
   const hotel = day.hotelId ? bookedHotels.find((item) => item.id === day.hotelId) : undefined
+  const driveReference = dayDriveReferences.find((item) => item.dayId === day.id)
   return (
     <article role="tabpanel" className="animate-[fadeUp_240ms_ease-out]">
       <div className="grid lg:grid-cols-[240px_1fr]">
@@ -299,6 +300,8 @@ function DayPanel({ day, cityName }: { day: TripDay; cityName: string }) {
             <SchedulePeriod icon="🌇" label="下午 · 晚上" items={schedule.afternoon} empty="轻松活动 / 早点休息" />
           </div>
 
+          {driveReference && <DriveReference reference={driveReference} />}
+
           <div className="mt-4 flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex flex-wrap gap-2">
               {day.play.map((item) => <span key={item} className="rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800">{item}</span>)}
@@ -313,7 +316,86 @@ function DayPanel({ day, cityName }: { day: TripDay; cityName: string }) {
   )
 }
 
+type DayDriveReference = (typeof dayDriveReferences)[number]
+
+function DriveReference({ reference }: { reference: DayDriveReference }) {
+  return (
+    <div className="mt-4 rounded-2xl border border-sky-100 bg-sky-50/70 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="font-black text-slate-800"><span aria-hidden>🚗</span> 酒店出发 · 自驾参考</div>
+        <div className="text-xs text-sky-700">区域估算 · 单程 · 常规路况</div>
+      </div>
+      <div className="mt-3 grid gap-2 lg:grid-cols-2">
+        {reference.items.map((item) => (
+          <div key={`${item.from}-${item.to}`} className="rounded-xl border border-white bg-white/90 px-3.5 py-3 shadow-sm">
+            <div className="text-sm font-bold leading-relaxed text-slate-700">{item.from} <span className="text-sky-500">→</span> {item.to}</div>
+            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+              <span><i className="ri-road-map-line mr-1 text-sky-600" />{item.distance}</span>
+              <span><i className="ri-time-line mr-1 text-sky-600" />{item.duration}</span>
+            </div>
+            {'warning' in item && item.warning && (
+              <div className="mt-2 text-xs leading-relaxed text-amber-700"><i className="ri-alert-line mr-1" />{item.warning}</div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 type BookedHotel = (typeof bookedHotels)[number]
+
+function HotelNavActions({ hotel, compact = false }: { hotel: BookedHotel; compact?: boolean }) {
+  const [copied, setCopied] = useState(false)
+  const verified = 'verifiedAddress' in hotel.nav && hotel.nav.verifiedAddress
+
+  const copyLocation = async () => {
+    try {
+      await navigator.clipboard.writeText(placeLocationText(hotel.nav))
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1800)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  return (
+    <div className={`flex flex-wrap gap-2 ${compact ? 'mt-2' : 'mt-4'}`}>
+      <a
+        href={amapNavigateUrl({ to: hotel.nav })}
+        target="_blank"
+        rel="noreferrer"
+        className={`${compact ? 'px-2.5 py-1.5 text-xs' : 'flex-1 px-3 py-2.5 text-sm'} inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 font-bold text-white transition hover:bg-emerald-700`}
+        aria-label={`在高德地图搜索${hotel.name}`}
+      >
+        <i className="ri-navigation-fill" />{verified ? '高德按地址搜索' : '高德搜订单名'}
+      </a>
+      <a
+        href={appleMapsSearchUrl(hotel.nav)}
+        target="_blank"
+        rel="noreferrer"
+        className={`${compact ? 'px-2.5 py-1.5 text-xs' : 'px-3 py-2.5 text-sm'} inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white font-bold text-slate-700 transition hover:bg-slate-50`}
+        aria-label={`在苹果地图搜索${hotel.name}`}
+      >
+        <i className="ri-map-pin-line" />苹果地图
+      </a>
+      <button
+        type="button"
+        onClick={copyLocation}
+        className={`${compact ? 'px-2.5 py-1.5 text-xs' : 'px-3 py-2.5 text-sm'} inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white font-bold text-slate-700 transition hover:bg-slate-50`}
+      >
+        <i className={copied ? 'ri-check-line text-emerald-600' : 'ri-file-copy-line'} />{copied ? '已复制' : '复制定位'}
+      </button>
+      {!compact && (
+        <div className={`w-full rounded-lg px-2.5 py-2 text-xs leading-relaxed ${verified ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-800'}`}>
+          {verified
+            ? `已补充公开完整地址：${hotel.nav.address}。首次打开仍请核对地图结果与订单。`
+            : '订单截图没有门牌号，地图只能搜索名称，不能保证落到房门位置；推荐复制定位后发给房东确认，或直接使用预订订单里的“导航”。'}
+        </div>
+      )}
+    </div>
+  )
+}
 
 function HotelStayBox({ hotel }: { hotel: BookedHotel }) {
   return (
@@ -323,15 +405,7 @@ function HotelStayBox({ hotel }: { hotel: BookedHotel }) {
         <span>{hotel.status}</span>
       </div>
       <div className="line-clamp-2 leading-relaxed text-slate-700">{hotel.name}</div>
-      <a
-        href={amapNavigateUrl({ to: hotel.nav })}
-        target="_blank"
-        rel="noreferrer"
-        className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-2.5 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-700"
-        aria-label={`导航到${hotel.name}`}
-      >
-        <i className="ri-navigation-fill" />定位导航
-      </a>
+      <HotelNavActions hotel={hotel} compact />
     </div>
   )
 }
@@ -383,7 +457,7 @@ function Hotels() {
             <p className="mt-3 text-slate-600">{bookedHotels.length} 笔订单·共 {totalNights} 晚，从入住日期到导航入口统一放在路书里。</p>
           </div>
           <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800">
-            <i className="ri-information-line mr-1" />截图未显示门牌号，当前导航会先在高德搜索订单名称
+            <i className="ri-information-line mr-1" />已公开核实 2 家完整地址；其余民宿需用订单导航或让房东发送定位
           </div>
         </div>
 
@@ -404,14 +478,7 @@ function Hotels() {
                 </div>
                 <div className="mt-3 text-sm leading-relaxed text-slate-600"><i className="ri-hotel-bed-line mr-1 text-emerald-600" />{hotel.room}</div>
                 <div className="mt-1 text-xs text-slate-400">预订平台：{hotel.source}</div>
-                <a
-                  href={amapNavigateUrl({ to: hotel.nav })}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700"
-                >
-                  <i className="ri-navigation-fill" />高德定位导航
-                </a>
+                <HotelNavActions hotel={hotel} />
               </div>
             </article>
           ))}
