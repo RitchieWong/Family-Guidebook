@@ -13,7 +13,7 @@ import {
  * - 两张图：身高 + 体重
  * - 每张都画：灰色 WHO P50 参考曲线 + 蓝粉色暄暄实测点 + 实测点之间的连线
  * - 实测点上 hover / tap 会显示 tooltip（带日期、数值、与 P50 差值）
- * - 月龄轴固定 0-24 月（后续超出再改）
+ * - 月龄轴至少展示 0-24 月，超出后自动扩到下一个整年
  */
 export default function GrowthChart() {
   const latest = MEASUREMENTS[MEASUREMENTS.length - 1]
@@ -178,6 +178,9 @@ function DiffCard({
           </span>
         </div>
       )}
+      {diff == null && (
+        <div className="mt-1 text-xs text-slate-400">WHO P50 暂无对应月龄数据</div>
+      )}
     </div>
   )
 }
@@ -219,7 +222,8 @@ function ChartCard({
   const padB = 32
 
   const xMin = 0
-  const xMax = 24
+  const latestAgeMonth = points.reduce((max, point) => Math.max(max, point.x), 0)
+  const xMax = Math.max(24, Math.ceil(latestAgeMonth / 12) * 12)
   const innerW = W - padL - padR
   const innerH = H - padT - padB
 
@@ -242,13 +246,11 @@ function ChartCard({
   for (let v = yMin; v <= yMax; v += yStep) yTicks.push(v)
 
   // X 轴刻度（每 6 个月一个）
-  const xTicks = [0, 6, 12, 18, 24]
-  const xLabels: Record<number, string> = {
-    0: '出生',
-    6: '6 月',
-    12: '1 岁',
-    18: '18 月',
-    24: '2 岁',
+  const xTicks = Array.from({ length: xMax / 6 + 1 }, (_, index) => index * 6)
+  const formatAgeTick = (month: number) => {
+    if (month === 0) return '出生'
+    if (month % 12 === 0) return `${month / 12} 岁`
+    return `${month} 月`
   }
 
   const dotColor = accent === 'rose' ? '#f43f5e' : '#f59e0b'
@@ -332,7 +334,7 @@ function ChartCard({
               fontSize="10"
               fill="#94a3b8"
             >
-              {xLabels[x]}
+              {formatAgeTick(x)}
             </text>
           </g>
         ))}

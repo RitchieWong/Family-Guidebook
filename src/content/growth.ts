@@ -42,6 +42,13 @@ export const MEASUREMENTS: GrowthMeasurement[] = [
     source: '北京妇幼 · 入园体检',
     note: '牙齿 16 颗，血红蛋白 118 g/L',
   },
+  {
+    date: '2026-08-27',
+    ageMonths: 28,
+    weightKg: 13.9,
+    heightCm: 87.4,
+    source: '营养指导报告',
+  },
 ]
 
 /**

@@ -76,7 +76,11 @@ export const MILESTONES: Milestone[] = [
   { date: '2026-03-10', age: '1 岁 10 个月 19 天', title: '会吹蜡烛了', emoji: '🕯️', tag: '人生第一次', highlight: true },
   { date: '2026-03-12', age: '1 岁 10 个月 21 天', title: '第一次用小马桶', emoji: '🚽', tag: '生活', highlight: true },
   { date: '2026-04-12', age: '1 岁 11 个月 24 天', title: '第一次露营', emoji: '⛺', tag: '人生第一次', highlight: true },
-  { date: '2026-04-13', age: '1 岁 11 个月 25 天', title: '第一次上托班', emoji: '🎒', tag: '人生第一次', highlight: true }
+  { date: '2026-04-13', age: '1 岁 11 个月 25 天', title: '第一次上托班', emoji: '🎒', tag: '人生第一次', highlight: true },
+  { date: '2026-04-30', age: '2 岁 11 天', title: '第一次坐摩天轮和旋转木马', emoji: '🎡', tag: '人生第一次', highlight: true },
+  { date: '2026-05-03', age: '2 岁 14 天', title: '会背爸爸手机号了', emoji: '📱', tag: '人生第一次', highlight: true },
+  { date: '2026-06-06', age: '2 岁 1 个月 18 天', title: '第一次主动去马桶尿尿', emoji: '🚽', tag: '人生第一次', highlight: true },
+  { date: '2026-08-01', age: '2 岁 3 个月 13 天', title: '完全主动去找马桶，自主如厕', emoji: '🚻', tag: '人生第一次', highlight: true }
 ]
 
 export const TAG_COLORS: Record<string, string> = {
