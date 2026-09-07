@@ -18,6 +18,7 @@ export type PerkCategory =
   | '免费'
   | '折扣'
   | '积分'
+  | '储值'
   | '生日'
   | '其他'
 
@@ -131,6 +132,30 @@ export const MEMBERSHIPS: Venue[] = [
       },
     ],
   },
+  {
+    id: 'chain-dining',
+    name: '连锁餐饮',
+    subtitle: '不限定商场的常用会员',
+    emoji: '🍽️',
+    desc: '家里常去的连锁餐饮会员和储值权益，结账前记得先看一眼。',
+    stores: [
+      {
+        name: '嘉和一品',
+        emoji: '🥣',
+        desc: '喝粥、吃家常饭时可以优先使用的储值卡。',
+        perks: [
+          {
+            title: '嘉和一品储值卡',
+            emoji: '💳',
+            category: '储值',
+            rule: '到店消费时优先核对并使用',
+            note: '余额、适用门店和有效期以会员账户显示为准。',
+            highlight: true,
+          },
+        ],
+      },
+    ],
+  },
 ]
 
 /** 权益分类 meta：配色 + 图标，UI 用 */
@@ -153,6 +178,10 @@ export const PERK_CATEGORY_META: Record<
   积分: {
     icon: 'ri-stack-line',
     color: 'bg-sky-50 text-sky-700 ring-sky-200',
+  },
+  储值: {
+    icon: 'ri-bank-card-line',
+    color: 'bg-indigo-50 text-indigo-700 ring-indigo-200',
   },
   生日: {
     icon: 'ri-cake-3-line',
